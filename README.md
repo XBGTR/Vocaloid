@@ -13,6 +13,17 @@ Hiçbir ses dosyası kullanılmıyor. Sesler, Web Audio API ile **formant sentez
   - Hornet oyundaki gibi ağızsızdır; hece gözlerinin biçiminden belli olur, pelerini ve ipek ipi sesle dalgalanır.
   - Sans'ın gözü parlar, Pikachu'nun yanakları kıvılcım saçar.
   - Creeper gür seste yanıp söner, Pac-Man'in ağız açısı ünlüye göre değişir.
+- **Her karakterin kendi dünyası:** Kartlarda ve büyük sahnede her karakterin arkasında geldiği oyunun ya da filmin sahnesi var. Sahneler hafifçe hareket eder ve karakter söyledikçe kendi renginde parlar:
+  - **McQueen:** Radiator Springs'te gün batımı, Route 66 tabelası ve akan yol.
+  - **Sans:** Karlı Snowdin, nöbetçi kulübesi ve yağan kar.
+  - **Hornet:** Hallownest mağarası; fenerler, bank ve süzülen ruh parçacıkları.
+  - **Sonic:** Green Hill Zone; damalı toprak, loop ve dönen halkalar.
+  - **Pikachu:** Pokémon yolu; uzun çimen ve Poké Ball.
+  - **Kirby:** Dream Land; parıldayan yıldızlar ve geçip giden Warp Star.
+  - **Creeper:** Minecraft blok dünyası.
+  - **Pac-Man:** Mavi labirent ve gezinen hayaletler.
+
+  Hareketleri azaltma ayarı açık cihazlarda animasyonlar durur.
 - **Herkesin kendine özgü sesi (imza):** Karakterler aynı formant motorunu kullanır ama her birine sesleri karışmasın diye bir imza eklendi:
   - **McQueen:** 31 Hz'lik "motor gürlemesi" (genlik modülasyonu); notaya aşağıdan "vroom" diye kayarak girer.
   - **Sans:** Kuru ve pes; kare dalgalı 23 Hz modülasyonla kemik tıkırtısı, vibrato yok.
