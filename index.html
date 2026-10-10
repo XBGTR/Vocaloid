@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#07040f" />
 <title>Oyun Korosu</title>
-<meta name="description" content="Oyun karakterlerinden oluşan sanal vokal grubu: Sans, Hornet, Sonic, Pikachu, Kirby, Creeper ve Pac-Man'i şarkı söylet, döngü kaydet, nota diz ve şarkını WAV olarak indir." />
+<meta name="description" content="Oyun karakterlerinden oluşan sanal vokal grubu: Şimşek McQueen, Sans, Hornet, Sonic, Pikachu, Kirby, Creeper ve Pac-Man'i şarkı söylet, döngü kaydet, nota diz ve şarkını WAV olarak indir." />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2312082a'/%3E%3Cpath d='M32 10 A22 22 0 1 0 52 42 L32 32 Z' fill='%23ffd400'/%3E%3Ccircle cx='34' cy='20' r='3' fill='%2312082a'/%3E%3Ccircle cx='54' cy='30' r='3' fill='%235ff6ff'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -320,7 +320,7 @@
     <section class="stage" id="stage" aria-label="Seçili karakter">
       <div class="big-av" id="bigAvatar"></div>
       <canvas id="fx" aria-hidden="true"></canvas>
-      <div class="nameplate"><b id="npName">Işıl</b><small id="npGame"></small></div>
+      <div class="nameplate"><b id="npName">Şimşek McQueen</b><small id="npGame"></small></div>
       <div class="readout" id="readout">Uykuda…</div>
     </section>
     <section class="panel pad-wrap" aria-label="Ses alanı: yatay eksen perde, dikey eksen ünlü harf">
@@ -350,7 +350,7 @@
       <button class="btn btn-rec" id="loopRecBtn" disabled><span class="rec-dot"></span><span id="loopRecLabel">Döngüye kaydet</span></button>
     </div>
     <div class="roll-head">
-      <span class="who">Izgara: <b id="rollWho">Işıl</b></span>
+      <span class="who">Izgara: <b id="rollWho">McQueen</b></span>
       <span class="lbl">Hece</span>
       <div class="seg vowel-seg" role="group" aria-label="Yeni notaların ünlüsü"></div>
       <span class="lbl">Uzunluk</span>
@@ -368,7 +368,7 @@
   <!-- ============ AYARLAR ============ -->
   <section class="panel controls" aria-label="Ayarlar">
     <div class="blk blk-char">
-      <h3>Seçili karakter: <b id="charTitle">Işıl</b></h3>
+      <h3>Seçili karakter: <b id="charTitle">Şimşek McQueen</b></h3>
       <div class="sliders" id="charSliders"></div>
     </div>
     <div class="blk blk-fx">
@@ -440,14 +440,15 @@
         <span>Karakter kanalı (seviye, eko, yankı)</span><em>→</em>
         <span>🔊</span>
       </div>
-      <p><b>Kaynak:</b> Ses tellerimiz perdesi olan, harmonikçe zengin bir "vızıltı" üretir. Burada bunu bir osilatör ve biraz beyaz gürültüyle (nefes) taklit ediyoruz. Karakterlerin farkı büyük ölçüde buradan gelir: Pac-Man ve Creeper kare/darbe dalgasıyla "8-bit" çıkar, Creeper'ın tıslaması ise yüksek nefes gürültüsüdür.</p>
+      <p><b>Kaynak:</b> Ses tellerimiz perdesi olan, harmonikçe zengin bir "vızıltı" üretir. Burada bunu bir osilatör ve biraz beyaz gürültüyle (nefes) taklit ediyoruz.</p>
       <p><b>Filtre:</b> Ağız ve boğaz bu vızıltının bazı frekanslarını güçlendirir; bu tepelere <i>formant</i> denir. "A" ile "İ" arasındaki fark perde değil, formantların yeridir. Her ses için 3 paralel bant geçiren filtre bu tepeleri oluşturur. Pikachu ve Kirby'de formantlar yukarı kaydırılır (küçük "kafa"), Sans'ta bas tablosu kullanılır.</p>
+      <p><b>Her karakterin imzası:</b> Sesler birbirine benzemesin diye her karaktere ayrı bir "imza" eklendi. McQueen'de 31 Hz'lik genlik modülasyonu motor gürlemesi gibi duyulur ve notaya aşağıdan "vroom" diye kayarak girer. Sans'ta kare dalgalı 23 Hz modülasyon kuru bir kemik tıkırtısı verir. Hornet nefesli ve kısadır, notaya yukarıdan düşerek girer ("Shaw!"). Sonic iki hafif akortsuz osilatörle kalınlaşır. Pikachu'nun formantları çok yukarıdadır ve vibratosu hızlıdır. Kirby'nin üst formantları kısılmıştır, yavaşça titrer. Creeper'ın sesi çoğunlukla tıslamadır. Pac-Man'de bit indirgeme ve F1/F2'yi salınımla kaydıran bir LFO "vaka-vaka" etkisi yaratır.</p>
       <p><b>Sıralayıcı:</b> Notalar, tarayıcının ses saatine göre biraz ileriden (≈120 ms) zamanlanır; böylece animasyon takılsa bile ritim kaymaz. Döngü kayıtları ise turun yüzdesi olarak saklanır, tempo değişince birlikte hızlanır.</p>
     </details>
   </section>
 
   <footer>
-    Hayran yapımı, ticari olmayan bir projedir; resmî değildir. Sans (Undertale) Toby Fox'a; Hornet (Hollow Knight) Team Cherry'ye; Sonic SEGA'ya; Pikachu The Pokémon Company / Nintendo'ya; Kirby Nintendo / HAL Laboratory'ye; Creeper (Minecraft) Mojang / Microsoft'a; Pac-Man Bandai Namco'ya aittir.<br />
+    Hayran yapımı, ticari olmayan bir projedir; resmî değildir. Şimşek McQueen (Cars) Disney / Pixar'a; Sans (Undertale) Toby Fox'a; Hornet (Hollow Knight) Team Cherry'ye; Sonic SEGA'ya; Pikachu The Pokémon Company / Nintendo'ya; Kirby Nintendo / HAL Laboratory'ye; Creeper (Minecraft) Mojang / Microsoft'a; Pac-Man Bandai Namco'ya aittir.<br />
     Tüm sesler hiçbir kayıt kullanılmadan, tamamen tarayıcında Web Audio API ile sentezlenir.
   </footer>
 </div>
@@ -564,6 +565,19 @@ const DEFAULT_PARAMS = {
   lowNote: 55,         // XY alanının ve ızgaranın en pes notası
   range: 24,           // kapsanan yarım ton sayısı
   kbBase: 60,          // klavyedeki A tuşunun notası
+  // --- Karaktere özgü "imza" ayarları (sesler birbirine benzemesin diye) ---
+  scoop: 0,            // nota başında perdeye yukarıdan (+) ya da aşağıdan (−) kayarak girme (cent)
+  scoopTime: 0.05,     // bu kaymanın zaman sabiti (sn)
+  amRate: 0,           // genlik modülasyonu hızı (Hz): ~5 Hz titreme, ~20-35 Hz hırıltı / motor gürlemesi
+  amDepth: 0,          // genlik modülasyonu derinliği (0…1)
+  amWave: 'sine',      // modülasyon dalgası ('square' = kesik kesik tıkırtı)
+  flfoRate: 0,         // formant LFO'su (Hz): F1/F2'yi salınımla kaydırır ("vaka-vaka")
+  flfoF1: 0,           // F1 salınım miktarı (Hz)
+  flfoF2: 0,           // F2 salınım miktarı (Hz)
+  crush: 0,            // >0: bit indirgeme basamak sayısı (8-bit konsol cızırtısı)
+  hiss: 0,             // formantlara uğramayan tiz tıslama seviyesi
+  noiseHP: 0,          // nefes gürültüsü için alt kesim (Hz): fısıltıyı "sss"e çevirir
+  tone: 1,             // perdeli sesin (osilatörün) seviyesi
 };
 // Kaydırıcıyla değişip saklanan ses ayarları
 const LIVE_KEYS = ['vibratoDepth', 'vibratoRate', 'breath', 'glide'];
@@ -740,7 +754,7 @@ class Voice {
       drift.connect(driftGain).connect(osc.detune);
       if (k === 0) drift.connect(shimmerDepth).connect(this.shimmer.gain);
       const og = reg(ctx.createGain());
-      og.gain.value = (WAVE_GAIN[P.wave] ?? 1) / Math.sqrt(n);
+      og.gain.value = ((WAVE_GAIN[P.wave] ?? 1) * P.tone) / Math.sqrt(n);
       osc.connect(og).connect(this.source);
       this.oscs.push(osc);
       this.sources.push(osc, drift);
@@ -752,7 +766,15 @@ class Voice {
     this.noise.loop = true;
     this.noiseGain = reg(ctx.createGain());
     this.noiseGain.gain.value = 0;
-    this.noise.connect(this.noiseGain).connect(this.source);
+    let noiseIn = this.noise;
+    if (P.noiseHP > 0) {   // alt frekansları kes: nefes "hhh" yerine "sss" gibi duyulur
+      const hp = reg(ctx.createBiquadFilter());
+      hp.type = 'highpass';
+      hp.frequency.value = P.noiseHP;
+      noiseIn.connect(hp);
+      noiseIn = hp;
+    }
+    noiseIn.connect(this.noiseGain).connect(this.source);
     this.sources.push(this.noise);
 
     // FİLTRE: 3 paralel formant
@@ -765,10 +787,49 @@ class Voice {
       this.formants.push({ bp, g });
     }
 
-    // ZARF + PAN → karakter kanalı
+    // --- Karaktere özgü imza efektleri ---
+    // Genlik modülasyonu: yavaşsa titreme (Kirby), 20-35 Hz'de hırıltı/motor gürlemesi (Sans, McQueen)
+    if (P.amRate > 0 && P.amDepth > 0) {
+      const am = reg(ctx.createOscillator());
+      am.type = P.amWave;
+      am.frequency.value = P.amRate * (0.97 + Math.random() * 0.06);
+      const amg = reg(ctx.createGain());
+      amg.gain.value = P.amDepth;
+      am.connect(amg).connect(this.shimmer.gain);
+      this.sources.push(am);
+    }
+    // Formant LFO'su: F1/F2 filtrelerinin frekansına doğrudan eklenir → "vaka-vaka" (Pac-Man)
+    if (P.flfoRate > 0) {
+      const lf = reg(ctx.createOscillator());
+      lf.frequency.value = P.flfoRate;
+      [P.flfoF1, P.flfoF2].forEach((depth, k) => {
+        if (!depth) return;
+        const g = reg(ctx.createGain());
+        g.gain.value = depth;
+        lf.connect(g).connect(this.formants[k].bp.frequency);
+      });
+      this.sources.push(lf);
+    }
+    // Tıslama: gürültünün tiz kısmı formantlara uğramadan eklenir (Creeper'ın fitili)
+    if (P.hiss > 0) {
+      const hp = reg(ctx.createBiquadFilter());
+      hp.type = 'highpass';
+      hp.frequency.value = 3500;
+      const hg = reg(ctx.createGain());
+      hg.gain.value = P.hiss;
+      this.noise.connect(hp).connect(hg).connect(this.shimmer);
+    }
+
+    // ZARF (+ isteğe bağlı bit indirgeme) + PAN → karakter kanalı
     this.env = reg(ctx.createGain());
     this.env.gain.value = 0;
-    this.shimmer.connect(this.env);
+    if (P.crush > 0) {   // WaveShaper ile basamaklı eğri: sinyal birkaç seviyeye yuvarlanır (8-bit)
+      const ws = reg(ctx.createWaveShaper());
+      ws.curve = engine.crushCurve(P.crush);
+      this.shimmer.connect(ws).connect(this.env);
+    } else {
+      this.shimmer.connect(this.env);
+    }
     if (ctx.createStereoPanner) {
       this.pan = reg(ctx.createStereoPanner());
       this.pan.pan.value = clamp(track.pan + (opts.pan || 0) * 0.4, -1, 1);
@@ -781,6 +842,11 @@ class Voice {
   start() {
     const t = this.startAt, P = this.P;
     this.applyFormants(t, true);
+    // Perdeye kayarak girme: önce biraz yukarıdan/aşağıdan başla, hızla hedef perdeye otur
+    if (P.scoop) {
+      const f0 = mtof(this.appliedMidi), r = Math.pow(2, P.scoop / 1200);
+      for (const o of this.oscs) { o.frequency.setValueAtTime(f0 * r, t); o.frequency.setTargetAtTime(f0, t, P.scoopTime); }
+    }
     // Saldırı: setTargetAtTime üstel olarak hedefe yaklaşır; zaman sabiti
     // attack/3 → "attack" saniye sonunda hedefin ~%95'ine ulaşılır.
     this.env.gain.setValueAtTime(0, t);
@@ -975,8 +1041,12 @@ class SingerEngine {
     this.fbL = ctx.createGain();
     this.fbR = ctx.createGain();
     // Geri beslemedeki alçak geçiren: her tekrarda eko biraz koyulaşır (bant eko hissi)
-    this.toneL = ctx.createBiquadFilter(); this.toneL.type = 'lowpass'; this.toneL.frequency.value = 3200;
-    this.toneR = ctx.createBiquadFilter(); this.toneR.type = 'lowpass'; this.toneR.frequency.value = 3200;
+    // Q = -3 dB: tepesiz (Butterworth) filtre; döngü kazancı hiçbir frekansta 1'i aşmasın, eko patlamasın
+    this.toneL = ctx.createBiquadFilter(); this.toneL.type = 'lowpass'; this.toneL.frequency.value = 3200; this.toneL.Q.value = -3.01;
+    this.toneR = ctx.createBiquadFilter(); this.toneR.type = 'lowpass'; this.toneR.frequency.value = 3200; this.toneR.Q.value = -3.01;
+    // Güvenli başlangıç değerleri (kaydırıcılar sonra günceller)
+    this.fbL.gain.value = this.fbR.gain.value = 0.35;
+    this.delayL.delayTime.value = this.delayR.delayTime.value = 0.41;
     const merger = ctx.createChannelMerger(2);
     this.delayOut = ctx.createGain();
     this.delayOut.gain.value = 0.9;
@@ -1024,6 +1094,17 @@ class SingerEngine {
   applyWave(osc, wave) {
     if (wave === 'sawtooth' || !this.waves[wave]) osc.type = 'sawtooth';
     else osc.setPeriodicWave(this.waves[wave]);
+  }
+
+  // Bit indirgeme eğrisi: -1…1 aralığını `levels` basamağa yuvarlar (eski konsol sesi)
+  crushCurve(levels) {
+    this.crushCache = this.crushCache || {};
+    if (!this.crushCache[levels]) {
+      const n = 4096, c = new Float32Array(n);
+      for (let i = 0; i < n; i++) { const x = (i / (n - 1)) * 2 - 1; c[i] = Math.round(x * levels) / levels; }
+      this.crushCache[levels] = c;
+    }
+    return this.crushCache[levels];
   }
 
   setVolume(v) {   // v: 0…1 (kulak logaritmik duyar, bu yüzden karesini alıyoruz)
@@ -1288,7 +1369,7 @@ function mouthSVG(u, { x, y, s = 1, rot = 0, inside = '#2b0f3f', tongue = '#ff6f
   return `<g class="mouth" transform="translate(${x} ${y}) rotate(${rot}) scale(${s})">
     <clipPath id="${u}-mc" clipPathUnits="userSpaceOnUse"><path class="mclip" d="M-20 0L20 0Z"/></clipPath>
     <path class="mfill" d="M-20 0L20 0Z" fill="${inside}"/>
-    <g clip-path="url(#${u}-mc)"><ellipse class="tongue" cx="0" cy="20" rx="18" ry="10" fill="${tongue}"/>${teeth ? '<path class="teeth" d="M-17 0L-12 9L-7 0ZM7 0L12 9L17 0Z" fill="#fff"/>' : ''}</g>
+    <g clip-path="url(#${u}-mc)"><ellipse class="tongue" cx="0" cy="20" rx="18" ry="10" fill="${tongue}"/>${teeth === 'row' ? '<rect class="teeth" x="-50" y="-1" width="100" height="10" fill="#fff"/>' : teeth ? '<path class="teeth" d="M-17 0L-12 9L-7 0ZM7 0L12 9L17 0Z" fill="#fff"/>' : ''}</g>
     <path class="mline" d="M-20 0L20 0Z" fill="none" stroke="${line}" stroke-width="${(lw / s).toFixed(2)}" stroke-linejoin="round"/>
   </g>`;
 }
@@ -1327,110 +1408,56 @@ function creeperTexture(x0, y0, cols, rows, s, seed, palette) {
 const CREEPER_GREENS = ['#5dbb3f', '#4fa635', '#6fd04c', '#3f8f2a', '#86d96b', '#58b33b', '#a6e38f'];
 
 const CHARS = [
-  /* ---------------- Işıl (ev sahibi, özgün karakter) ---------------- */
+  /* ---------------- Şimşek McQueen (Cars) ---------------- */
   {
-    id: 'isil', name: 'Işıl', game: 'Derinlerin Sesi', color: '#8f7cff',
-    vb: [-10, -45, 420, 475], pivot: [200, 300], scaleAt: [200, 385], shadow: [200, 412, 112, 10], mouthAt: [200, 312],
-    unit: 1, motion: { sway: 1, bob: 1, puff: 1 },
-    voice: { voiceType: 'alto', wave: 'sawtooth', formantShift: 1, brightness: 0, bwScale: 1.25, vibratoRate: 5.6, vibratoDepth: 35, vibratoDelay: 0.35, jitter: 7, attack: 0.08, release: 0.35, glide: 0.035, vowelGlide: 0.05, breath: 0.35, lowNote: 55, range: 24, kbBase: 60 },
-    mix: { volume: 0.6, delay: 0.18, reverb: 0.32, pan: 0 },
+    id: 'mcqueen', name: 'McQueen', full: 'Şimşek McQueen', game: 'Cars', color: '#ff3b3b',
+    vb: [0, 0, 200, 230], pivot: [100, 206], scaleAt: [100, 206], shadow: [100, 212, 84, 7], mouthAt: [100, 172],
+    unit: 0.5, motion: { sway: 0.45, bob: 0.8, puff: 0.35 },
+    // İmza: motor gürlemesi (31 Hz genlik modülasyonu) + perdeye aşağıdan "vroom" diye kayarak girme
+    voice: { voiceType: 'tenor', wave: 'sawtooth', formantShift: 0.98, brightness: 2, bwScale: 1.3, vibratoRate: 5, vibratoDepth: 12, vibratoDelay: 0.4, jitter: 5, attack: 0.03, release: 0.25, glide: 0.06, vowelGlide: 0.05, breath: 0.2, scoop: -350, scoopTime: 0.09, amRate: 31, amDepth: 0.32, lowNote: 48, range: 24, kbBase: 60 },
+    mix: { volume: 0.7, delay: 0.15, reverb: 0.2, pan: 0 },
     svg: (u) => `
       <defs>
-        <radialGradient id="${u}-body" cx="38%" cy="28%" r="78%"><stop offset="0" stop-color="#a596ff"/><stop offset=".55" stop-color="#6650e0"/><stop offset="1" stop-color="#2c1f8c"/></radialGradient>
-        <radialGradient id="${u}-belly" cx="50%" cy="30%" r="70%"><stop offset="0" stop-color="#e2dbff" stop-opacity=".75"/><stop offset="1" stop-color="#b3a4ff" stop-opacity="0"/></radialGradient>
-        <linearGradient id="${u}-fin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7b67f0"/><stop offset="1" stop-color="#3ff2dc" stop-opacity=".75"/></linearGradient>
-        <radialGradient id="${u}-spot"><stop offset="0" stop-color="#e6fffb"/><stop offset=".35" stop-color="#3ff2dc"/><stop offset="1" stop-color="#3ff2dc" stop-opacity="0"/></radialGradient>
-        <radialGradient id="${u}-halo"><stop class="lan" offset="0" stop-color="#3ff2dc" stop-opacity=".85"/><stop class="lan" offset=".3" stop-color="#3ff2dc" stop-opacity=".3"/><stop class="lan" offset="1" stop-color="#3ff2dc" stop-opacity="0"/></radialGradient>
-        <radialGradient id="${u}-bulb" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fff"/><stop class="lan" offset=".5" stop-color="#3ff2dc"/><stop class="land" offset="1" stop-color="#139c8c"/></radialGradient>
-        <radialGradient id="${u}-iris" cx="50%" cy="38%" r="62%"><stop offset="0" stop-color="#161038"/><stop offset=".72" stop-color="#2b1e70"/><stop offset="1" stop-color="#3ff2dc"/></radialGradient>
-        <clipPath id="${u}-eL"><circle cx="148" cy="212" r="37"/></clipPath>
-        <clipPath id="${u}-eR"><circle cx="252" cy="212" r="37"/></clipPath>
+        <linearGradient id="${u}-red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6a5c"/><stop offset=".5" stop-color="#e3262f"/><stop offset="1" stop-color="#9c1019"/></linearGradient>
+        <linearGradient id="${u}-glass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe8f2"/></linearGradient>
+        <radialGradient id="${u}-iris" cx="45%" cy="40%" r="60%"><stop offset="0" stop-color="#7cc4ff"/><stop offset="1" stop-color="#1f6fd1"/></radialGradient>
+        <clipPath id="${u}-ws"><path d="M62 104 L74 64 Q100 57 126 64 L138 104 Q100 110 62 104 Z"/></clipPath>
       </defs>
-      <g class="tail" transform="translate(292 338)">
-        <path d="M0 0 C28 -8 58 -40 86 -34 C72 -4 76 28 92 50 C62 46 30 30 0 14 Z" fill="url(#${u}-fin)" stroke="#2c1f8c" stroke-width="3" stroke-linejoin="round"/>
-        <path d="M10 6 L74 -24 M12 9 L78 14 M10 12 L76 42" stroke="#2c1f8c" stroke-width="2" opacity="0.45"/>
-      </g>
-      <g class="finL" transform="translate(80 272)">
-        <path d="M0 0 C-28 -22 -68 -14 -80 14 C-62 22 -42 36 -22 42 C-10 30 -2 14 0 0 Z" fill="url(#${u}-fin)" stroke="#2c1f8c" stroke-width="3" stroke-linejoin="round"/>
-        <path d="M-4 6 L-66 8 M-6 12 L-46 32 M-6 18 L-26 36" stroke="#2c1f8c" stroke-width="2" opacity="0.45"/>
-      </g>
-      <g class="finR" transform="translate(320 272) scale(-1 1)">
-        <path d="M0 0 C-28 -22 -68 -14 -80 14 C-62 22 -42 36 -22 42 C-10 30 -2 14 0 0 Z" fill="url(#${u}-fin)" stroke="#2c1f8c" stroke-width="3" stroke-linejoin="round"/>
-        <path d="M-4 6 L-66 8 M-6 12 L-46 32 M-6 18 L-26 36" stroke="#2c1f8c" stroke-width="2" opacity="0.45"/>
-      </g>
-      <path class="stalk" d="M200 130 C205 60 250 30 292 46" stroke="#2c1f8c" stroke-width="7" fill="none" stroke-linecap="round"/>
-      <ellipse cx="200" cy="255" rx="138" ry="130" fill="url(#${u}-body)" stroke="#22146a" stroke-width="4"/>
-      <ellipse cx="200" cy="322" rx="98" ry="58" fill="url(#${u}-belly)"/>
-      <g class="spots">
-        <circle cx="92" cy="226" r="11" fill="url(#${u}-spot)"/><circle cx="106" cy="306" r="8" fill="url(#${u}-spot)"/>
-        <circle cx="308" cy="226" r="11" fill="url(#${u}-spot)"/><circle cx="294" cy="306" r="8" fill="url(#${u}-spot)"/>
-        <circle cx="150" cy="150" r="7" fill="url(#${u}-spot)"/><circle cx="250" cy="150" r="7" fill="url(#${u}-spot)"/>
-        <circle cx="200" cy="368" r="8" fill="url(#${u}-spot)"/>
-      </g>
-      <ellipse class="cheek" cx="110" cy="282" rx="22" ry="12" fill="#ff7eb6" opacity="0.3"/>
-      <ellipse class="cheek" cx="290" cy="282" rx="22" ry="12" fill="#ff7eb6" opacity="0.3"/>
-      <g>
-        <circle cx="148" cy="212" r="37" fill="#f4f6ff"/>
-        <g clip-path="url(#${u}-eL)">
-          <g class="pupil"><circle cx="148" cy="214" r="24" fill="url(#${u}-iris)"/><circle cx="148" cy="214" r="12" fill="#07051a"/><circle cx="139" cy="204" r="7" fill="#fff"/><circle cx="156" cy="221" r="3" fill="#fff" opacity="0.8"/></g>
-          <g class="lid"><rect x="104" y="95" width="88" height="80" fill="#5b46d8"/><path d="M104 175 Q148 186 192 175" stroke="#22146a" stroke-width="3.5" fill="none"/></g>
+      <rect x="20" y="154" width="32" height="54" rx="10" fill="#1b1b20" stroke="#000" stroke-width="2"/>
+      <rect x="148" y="154" width="32" height="54" rx="10" fill="#1b1b20" stroke="#000" stroke-width="2"/>
+      <path d="M26 198 H46 M154 198 H174" stroke="#3a3a42" stroke-width="3"/>
+      <g class="chassis">
+        <path d="M72 58 L68 46 M128 58 L132 46" stroke="#7a0d14" stroke-width="5" stroke-linecap="round"/>
+        <rect x="32" y="36" width="136" height="12" rx="5" fill="url(#${u}-red)" stroke="#5a0a10" stroke-width="2.5"/>
+        <path d="M22 152 Q24 116 48 106 L152 106 Q176 116 178 152 L176 190 Q100 206 24 190 Z" fill="url(#${u}-red)" stroke="#5a0a10" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M54 108 L68 60 Q100 50 132 60 L146 108 Z" fill="url(#${u}-red)" stroke="#5a0a10" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M62 104 L74 64 Q100 57 126 64 L138 104 Q100 110 62 104 Z" fill="url(#${u}-glass)"/>
+        <g clip-path="url(#${u}-ws)">
+          <g class="pupils">
+            <ellipse cx="86" cy="86" rx="11" ry="13" fill="url(#${u}-iris)"/><ellipse cx="87" cy="87" rx="5.5" ry="7" fill="#0d1a2e"/><circle cx="83" cy="82" r="3" fill="#fff"/>
+            <ellipse cx="114" cy="86" rx="11" ry="13" fill="url(#${u}-iris)"/><ellipse cx="115" cy="87" rx="5.5" ry="7" fill="#0d1a2e"/><circle cx="111" cy="82" r="3" fill="#fff"/>
+          </g>
+          <rect class="lid" x="56" y="10" width="88" height="50" fill="#d8212b"/>
         </g>
-        <circle cx="148" cy="212" r="37" fill="none" stroke="#22146a" stroke-width="3.5"/>
-      </g>
-      <g>
-        <circle cx="252" cy="212" r="37" fill="#f4f6ff"/>
-        <g clip-path="url(#${u}-eR)">
-          <g class="pupil"><circle cx="252" cy="214" r="24" fill="url(#${u}-iris)"/><circle cx="252" cy="214" r="12" fill="#07051a"/><circle cx="243" cy="204" r="7" fill="#fff"/><circle cx="260" cy="221" r="3" fill="#fff" opacity="0.8"/></g>
-          <g class="lid"><rect x="208" y="95" width="88" height="80" fill="#5b46d8"/><path d="M208 175 Q252 186 296 175" stroke="#22146a" stroke-width="3.5" fill="none"/></g>
-        </g>
-        <circle cx="252" cy="212" r="37" fill="none" stroke="#22146a" stroke-width="3.5"/>
-      </g>
-      <path class="browL" d="M116 160 Q146 146 176 158" stroke="#22146a" stroke-width="6" fill="none" stroke-linecap="round"/>
-      <path class="browR" d="M224 158 Q254 146 284 160" stroke="#22146a" stroke-width="6" fill="none" stroke-linecap="round"/>
-      ${mouthSVG(u, { x: 200, y: 300, teeth: true })}
-      <g class="bulb" transform="translate(292 46)">
-        <circle class="halo" r="78" fill="url(#${u}-halo)" opacity="0.5"/>
-        <circle r="16" fill="url(#${u}-bulb)" stroke="#2c1f8c" stroke-width="2.5"/>
-        <circle cx="-5" cy="-6" r="4.5" fill="#fff" opacity="0.9"/>
+        <path d="M62 104 L74 64 Q100 57 126 64 L138 104 Q100 110 62 104 Z" fill="none" stroke="#5a0a10" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M50 134 L98 122 L94 130 L150 116 L104 138 L108 130 Z" fill="#ffd21f" stroke="#e8620c" stroke-width="2.5" stroke-linejoin="round"/>
+        <text x="101" y="134" text-anchor="middle" font-family="Impact, 'Arial Black', sans-serif" font-size="17" font-style="italic" font-weight="900" fill="#fff" stroke="#5a0a10" stroke-width="1.2" paint-order="stroke">95</text>
+        <ellipse class="hl" cx="38" cy="140" rx="11" ry="8" fill="#fff4b8" stroke="#5a0a10" stroke-width="2"/>
+        <ellipse class="hl" cx="162" cy="140" rx="11" ry="8" fill="#fff4b8" stroke="#5a0a10" stroke-width="2"/>
+        <path d="M32 186 Q100 200 168 186" stroke="#5a0a10" stroke-width="2.5" fill="none"/>
+        ${mouthSVG(u, { x: 100, y: 167, s: 0.82, inside: '#2a0808', tongue: '#ff6f7a', line: '#5a0a10', lw: 3, teeth: 'row' })}
       </g>`,
-    bind: (q, qa) => ({ tail: q('.tail'), finL: q('.finL'), finR: q('.finR'), stalk: q('.stalk'), bulb: q('.bulb'), halo: q('.halo'),
-      browL: q('.browL'), browR: q('.browR'), cheeks: qa('.cheek'), spots: qa('.spots circle'), lids: qa('.lid'), pupils: qa('.pupil'),
-      lan: qa('.lan'), land: qa('.land'), mouth: bindMouth(q) }),
-    animate(p, a, st) {
+    bind: (q, qa) => ({ chassis: q('.chassis'), pupils: q('.pupils'), lid: q('.lid'), hls: qa('.hl'), mouth: bindMouth(q) }),
+    animate(p, a) {
       const { t, L } = a;
-      const flap = Math.sin(t * 2.3) * 8 + L * Math.sin(t * 8) * 12;
-      p.finL.setAttribute('transform', `translate(80 272) rotate(${(-flap).toFixed(2)})`);
-      p.finR.setAttribute('transform', `translate(320 272) scale(-1 1) rotate(${(-flap).toFixed(2)})`);
-      p.tail.setAttribute('transform', `translate(292 338) rotate(${(Math.sin(t * 1.7) * 9 + L * Math.sin(t * 5) * 6).toFixed(2)})`);
       setMouth(p.mouth, a.m, a.open);
-      const lid = Math.max(a.blink, a.squint);
-      for (const el of p.lids) el.setAttribute('transform', `translate(0 ${(lid * 76).toFixed(1)})`);
-      for (const el of p.pupils) el.setAttribute('transform', `translate(${(a.look.x * 9).toFixed(2)} ${(a.look.y * 7).toFixed(2)})`);
-      const brow = a.singing ? (a.pitch - 0.4) * 16 : Math.sin(t * 0.5) * 1.5;
-      p.browL.setAttribute('transform', `translate(0 ${(-brow).toFixed(2)}) rotate(${(-brow * 0.3).toFixed(2)} 146 154)`);
-      p.browR.setAttribute('transform', `translate(0 ${(-brow).toFixed(2)}) rotate(${(brow * 0.3).toFixed(2)} 254 154)`);
-      for (const c of p.cheeks) c.setAttribute('opacity', (0.25 + L * 0.45).toFixed(3));
-      p.spots.forEach((el, i) => el.setAttribute('opacity', clamp(0.35 + 0.25 * Math.sin(t * 1.3 + i * 1.7) + L * 0.6, 0, 1).toFixed(3)));
-      // Fener: yay benzeri gecikmeyle sallanır, sesle parlar, perdeyle renk değiştirir
-      if (!st.bulb) st.bulb = { x: 292, y: 46, vx: 0, vy: 0, hue: 175 };
-      const b = st.bulb, dt = a.dt;
-      const tx = 292 - a.sway * 2.2 + Math.sin(t * 0.7) * 3;
-      const ty = 46 + Math.sin(t * 1.1) * 4 + L * Math.sin(t * a.vibRate * Math.PI * 2) * 2.5 - L * 6;
-      b.vx += ((tx - b.x) * 60 - b.vx * 7) * dt;
-      b.vy += ((ty - b.y) * 60 - b.vy * 7) * dt;
-      b.x += b.vx * dt;
-      b.y += b.vy * dt;
-      p.bulb.setAttribute('transform', `translate(${b.x.toFixed(2)} ${b.y.toFixed(2)})`);
-      p.stalk.setAttribute('d', `M200 130 C${(204 - a.sway).toFixed(1)} 62 ${(b.x - 46).toFixed(1)} ${(b.y - 18).toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}`);
-      p.halo.setAttribute('opacity', clamp(a.singing ? 0.35 + L * 0.75 : 0.28 + 0.1 * Math.sin(t * 2), 0, 1).toFixed(3));
-      p.halo.setAttribute('r', (60 + L * 45).toFixed(1));
-      b.hue += ((a.singing ? 185 - a.pitch * 145 : 175) - b.hue) * smooth(dt, 0.15);
-      const col = `hsl(${b.hue.toFixed(0)} 95% 62%)`;
-      if (col !== st.col) {
-        st.col = col;
-        for (const s of p.lan) s.setAttribute('stop-color', col);
-        for (const s of p.land) s.setAttribute('stop-color', `hsl(${b.hue.toFixed(0)} 80% 35%)`);
-      }
+      // Ön cam = gözler; kırmızı kapak göz kapağı gibi iner
+      p.lid.setAttribute('transform', `translate(0 ${(Math.max(a.blink, a.squint * 0.8) * 50).toFixed(1)})`);
+      p.pupils.setAttribute('transform', `translate(${(a.look.x * 6).toFixed(2)} ${(a.look.y * 4).toFixed(2)})`);
+      // Motor titreşimi + süspansiyon: ses yükseldikçe kasa titreyip yaylanır (tekerler yerinde kalır)
+      const shake = L * Math.sin(t * 55) * 0.9, lift = -L * 3 + Math.sin(t * 2.2) * 0.8;
+      p.chassis.setAttribute('transform', `translate(${(shake * 0.4).toFixed(2)} ${(lift + shake).toFixed(2)})`);
+      for (const h of p.hls) h.setAttribute('fill', L > 0.4 ? '#fffbe6' : '#fff4b8');
     },
   },
 
@@ -1439,7 +1466,8 @@ const CHARS = [
     id: 'sans', name: 'Sans', game: 'Undertale', color: '#6fb6ff',
     vb: [0, 0, 200, 230], pivot: [100, 200], scaleAt: [100, 218], shadow: [100, 220, 54, 6], mouthAt: [100, 108],
     unit: 0.5, motion: { sway: 0.8, bob: 0.7, puff: 0.6 },
-    voice: { voiceType: 'bass', wave: 'pulse', formantShift: 1, brightness: 1, bwScale: 1.3, vibratoRate: 5, vibratoDepth: 15, vibratoDelay: 0.3, jitter: 4, attack: 0.02, release: 0.25, glide: 0.03, vowelGlide: 0.04, breath: 0.15, lowNote: 36, range: 24, kbBase: 48 },
+    // İmza: kuru, pes ve 'kemik tıkırtılı' (23 Hz kare genlik modülasyonu), vibratosuz
+    voice: { voiceType: 'bass', wave: 'pulse', formantShift: 0.95, brightness: 0, bwScale: 1.6, vibratoRate: 5, vibratoDepth: 0, vibratoDelay: 0.3, jitter: 2, attack: 0.012, release: 0.16, glide: 0.02, vowelGlide: 0.03, breath: 0.08, scoop: -120, scoopTime: 0.03, amRate: 23, amDepth: 0.38, amWave: 'square', lowNote: 36, range: 24, kbBase: 48 },
     mix: { volume: 0.85, delay: 0.08, reverb: 0.2, pan: -0.15 },
     svg: (u) => {
       const tick = (t, dy) => { const x = 60 + 80 * t, y = 100 + 32 * t * (1 - t); return `M${x.toFixed(1)} ${(y - dy).toFixed(1)}V${y.toFixed(1)}`; };
@@ -1499,46 +1527,59 @@ const CHARS = [
 
   /* ---------------- Hornet (Hollow Knight) ---------------- */
   {
-    id: 'hornet', name: 'Hornet', game: 'Hollow Knight', color: '#ff5a6a',
-    vb: [0, 0, 200, 230], pivot: [100, 200], scaleAt: [100, 218], shadow: [100, 220, 50, 6], mouthAt: [100, 108],
-    unit: 0.5, motion: { sway: 1.2, bob: 1, puff: 0.5 },
-    voice: { voiceType: 'soprano', wave: 'sawtooth', formantShift: 1.05, brightness: 3, bwScale: 1.1, vibratoRate: 6.6, vibratoDepth: 45, vibratoDelay: 0.2, jitter: 6, attack: 0.01, release: 0.3, glide: 0.025, vowelGlide: 0.03, breath: 0.3, lowNote: 64, range: 24, kbBase: 72 },
+    id: 'hornet', name: 'Hornet', game: 'Hollow Knight', color: '#e8404f',
+    vb: [0, 0, 200, 230], pivot: [100, 206], scaleAt: [100, 216], shadow: [100, 220, 46, 6], mouthAt: [100, 112],
+    unit: 0.5, motion: { sway: 1.1, bob: 1, puff: 0.4 },
+    // İmza: nefesli, keskin ve kısa; notaya yukarıdan düşerek girer ("Shaw!")
+    voice: { voiceType: 'soprano', wave: 'sawtooth', formantShift: 1.22, brightness: 5, bwScale: 0.85, vibratoRate: 7, vibratoDepth: 30, vibratoDelay: 0.15, jitter: 6, attack: 0.003, release: 0.12, glide: 0.02, vowelGlide: 0.025, breath: 1.4, noiseHP: 1200, tone: 0.8, scoop: 250, scoopTime: 0.05, lowNote: 64, range: 24, kbBase: 72 },
     mix: { volume: 0.7, delay: 0.2, reverb: 0.45, pan: 0.35 },
-    svg: () => `
+    svg: (u) => `
+      <defs>
+        <linearGradient id="${u}-mask" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7f5ef"/><stop offset="1" stop-color="#d3cfc5"/></linearGradient>
+        <linearGradient id="${u}-cloak" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9313f"/><stop offset="1" stop-color="#8a1828"/></linearGradient>
+      </defs>
+      <path class="silk" d="M146 146 C168 168 150 190 170 216" stroke="#f1eee6" stroke-width="1.6" fill="none" opacity="0.85"/>
+      <path d="M94 182 L90 210 L80 219" stroke="#15131a" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M106 182 L110 210 L120 219" stroke="#15131a" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M90 126 Q100 122 110 126 L113 186 Q100 190 87 186 Z" fill="#15131a"/>
+      <path class="cloak" d="M92 122 Q100 128 108 122 Q134 128 142 150 Q150 172 154 198 Q136 186 118 190 L100 184 L82 190 Q64 186 46 198 Q50 172 58 150 Q66 128 92 122 Z" fill="url(#${u}-cloak)" stroke="#43101a" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M86 140 Q80 166 72 190 M114 140 Q120 166 128 190" stroke="#6e1222" stroke-width="2" fill="none" opacity="0.7"/>
       <g class="needle">
-        <path d="M146 126 L182 26" stroke="#d9dde3" stroke-width="3.5" stroke-linecap="round"/>
-        <path d="M146 126 Q172 160 156 206" stroke="#ffffff" stroke-width="1.6" fill="none" opacity="0.8"/>
+        <path d="M126 150 Q138 148 146 144" stroke="#15131a" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+        <path d="M144 150 L184 40" stroke="#c9ced6" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M181 48 L185 37" stroke="#f3f5f7" stroke-width="1.6" stroke-linecap="round"/>
+        <ellipse cx="146" cy="145" rx="2.6" ry="4" transform="rotate(20 146 145)" fill="none" stroke="#c9ced6" stroke-width="1.8"/>
       </g>
-      <path d="M92 190 L88 212 M108 190 L112 212" stroke="#17161c" stroke-width="5" stroke-linecap="round"/>
-      <path d="M80 214 H94 M106 214 H120" stroke="#17161c" stroke-width="5" stroke-linecap="round"/>
-      <path class="cloak" d="M84 114 L116 114 Q146 138 152 196 Q126 190 100 200 Q74 190 48 196 Q54 138 84 114 Z" fill="#c0313f" stroke="#4a0d17" stroke-width="3" stroke-linejoin="round"/>
-      <path d="M90 116 Q100 150 96 196 M110 116 Q104 150 108 196" stroke="#8f1f2c" stroke-width="2" fill="none" opacity="0.7"/>
-      <path class="arm" d="M132 136 L146 126" stroke="#17161c" stroke-width="5" stroke-linecap="round"/>
       <g class="head">
-        <path d="M78 66 Q68 36 64 4 Q80 30 94 56 Z" fill="#f1f0ea" stroke="#1d1c22" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M122 66 Q132 36 136 4 Q120 30 106 56 Z" fill="#f1f0ea" stroke="#1d1c22" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M64 80 Q64 52 100 50 Q136 52 136 80 Q136 104 114 116 Q100 124 86 116 Q64 104 64 80 Z" fill="#f4f3ee" stroke="#1d1c22" stroke-width="3"/>
-        <g class="eyes">
-          <ellipse cx="86" cy="82" rx="9.5" ry="14" transform="rotate(-14 86 82)" fill="#0c0b10"/>
-          <ellipse cx="114" cy="82" rx="9.5" ry="14" transform="rotate(14 114 82)" fill="#0c0b10"/>
-        </g>
-        <ellipse class="mo" cx="100" cy="106" rx="0" ry="0" fill="#0c0b10"/>
+        <path d="M76 58 C63 42 57 22 63 2 C67 22 77 34 93 45 Z" fill="url(#${u}-mask)" stroke="#1c1b21" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M124 58 C137 42 143 22 137 2 C133 22 123 34 107 45 Z" fill="url(#${u}-mask)" stroke="#1c1b21" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M62 80 C60 56 78 42 100 42 C122 42 140 56 138 80 C136 102 120 118 100 127 C80 118 64 102 62 80 Z" fill="url(#${u}-mask)" stroke="#1c1b21" stroke-width="3"/>
+        <ellipse class="eL" cx="84" cy="85" rx="10.5" ry="16.5" transform="rotate(-17 84 85)" fill="#0b0a0f"/>
+        <ellipse class="eR" cx="116" cy="85" rx="10.5" ry="16.5" transform="rotate(17 116 85)" fill="#0b0a0f"/>
       </g>`,
-    bind: (q) => ({ cloak: q('.cloak'), needle: q('.needle'), head: q('.head'), eyes: q('.eyes'), mo: q('.mo'), arm: q('.arm') }),
+    bind: (q) => ({ cloak: q('.cloak'), needle: q('.needle'), silk: q('.silk'), head: q('.head'), eL: q('.eL'), eR: q('.eR') }),
     animate(p, a) {
       const { t, L } = a;
+      // Pelerin: etek uçları rüzgârda ve sesle dalgalanır
       const fx = Math.sin(t * 2.1) * 3 + L * Math.sin(t * 7) * 6;
-      const w1 = Math.sin(t * 3) * 3 + L * 5 * Math.sin(t * 9), w2 = Math.sin(t * 2.6 + 1) * 3 + L * 4 * Math.sin(t * 8 + 2);
-      p.cloak.setAttribute('d', `M84 114 L116 114 Q146 138 ${(152 + fx).toFixed(1)} 196 Q126 ${(190 + w1).toFixed(1)} 100 ${(200 + w2).toFixed(1)} Q74 ${(190 - w1).toFixed(1)} ${(48 - fx).toFixed(1)} 196 Q54 138 84 114 Z`);
-      const nd = Math.sin(t * 1.4) * 4 + L * Math.sin(t * 5) * 8;
-      rot(p.needle, nd, 146, 126);
-      rot(p.arm, nd, 146, 126);
-      scaleY(p.eyes, 100, 82, 1 - Math.max(a.blink, a.squint * 0.6) * 0.92);
-      // Maskenin altında, yalnızca şarkı söylerken görünen küçük ağız
-      const o = a.open;
-      p.mo.setAttribute('rx', (o * a.m.w * 0.15).toFixed(2));
-      p.mo.setAttribute('ry', (o * (a.m.top + a.m.bot) * 0.13).toFixed(2));
-      rot(p.head, Math.sin(t * 0.8) * 2 + L * Math.sin(t * 3) * 4, 100, 112);
+      const w1 = Math.sin(t * 3) * 3 + L * 6 * Math.sin(t * 9);
+      const w2 = Math.sin(t * 2.6 + 1) * 2 + L * 4 * Math.sin(t * 8 + 2);
+      const w3 = Math.sin(t * 3.4 + 2) * 2 + L * 3 * Math.sin(t * 10);
+      const f = (v) => v.toFixed(1);
+      p.cloak.setAttribute('d', `M92 122 Q100 128 108 122 Q134 128 142 150 Q150 172 ${f(154 + fx)} ${f(198 + w1)} Q136 ${f(186 + w2)} 118 ${f(190 + w2)} L100 ${f(184 + w3)} L82 ${f(190 - w2)} Q64 ${f(186 - w2)} ${f(46 - fx)} ${f(198 - w1)} Q50 172 58 150 Q66 128 92 122 Z`);
+      const nd = Math.sin(t * 1.4) * 4 + L * Math.sin(t * 5) * 9;
+      rot(p.needle, nd, 146, 146);
+      // İpek ip: ses yükseldikçe daha çok dalgalanır
+      const wv = (4 + L * 16) * Math.sin(t * 6);
+      p.silk.setAttribute('d', `M146 146 C${f(168 + wv)} 168 ${f(150 - wv)} 190 ${f(170 + wv * 0.5)} 216`);
+      // Oyundaki gibi ağzı yok: hece, gözlerin biçimiyle gösterilir (a: iri, i: kısık, o: yuvarlak)
+      const o = a.singing ? a.open : 0;
+      const sy = lerp(1, vowelLerp([1.12, 0.9, 0.62, 1.04, 0.84], a.vowel), o) * (1 - Math.max(a.blink, a.squint * 0.35) * 0.92);
+      const sx = lerp(1, vowelLerp([1.02, 1.06, 1.14, 1.12, 0.94], a.vowel), o);
+      const eye = (el, cx, ang) => el.setAttribute('transform', `rotate(${ang} ${cx} 85) translate(${cx} 85) scale(${sx.toFixed(3)} ${Math.max(0.05, sy).toFixed(3)}) translate(${-cx} -85)`);
+      eye(p.eL, 84, -17);
+      eye(p.eR, 116, 17);
+      rot(p.head, Math.sin(t * 0.8) * 2 + L * Math.sin(t * 3) * 4, 100, 118);
     },
   },
 
@@ -1547,7 +1588,8 @@ const CHARS = [
     id: 'sonic', name: 'Sonic', game: 'Sonic the Hedgehog', color: '#3a7bff',
     vb: [0, 0, 200, 230], pivot: [100, 200], scaleAt: [100, 214], shadow: [100, 216, 52, 6], mouthAt: [106, 104],
     unit: 0.5, motion: { sway: 1, bob: 1.2, puff: 0.6 },
-    voice: { voiceType: 'tenor', wave: 'sawtooth', formantShift: 1.08, brightness: 2, bwScale: 1.15, vibratoRate: 6, vibratoDepth: 25, vibratoDelay: 0.25, jitter: 6, attack: 0.015, release: 0.18, glide: 0.02, vowelGlide: 0.03, breath: 0.25, lowNote: 52, range: 24, kbBase: 60 },
+    // İmza: parlak, ikiz osilatörle kalın ve kendinden emin; notaya yukarıdan 'kayarak' girer
+    voice: { voiceType: 'tenor', wave: 'sawtooth', formantShift: 1.05, brightness: 3, bwScale: 1.2, unison: 3, unisonDetune: 13, vibratoRate: 6.5, vibratoDepth: 20, vibratoDelay: 0.2, jitter: 6, attack: 0.005, release: 0.14, glide: 0.012, vowelGlide: 0.02, breath: 0.25, scoop: 180, scoopTime: 0.035, lowNote: 52, range: 24, kbBase: 60 },
     mix: { volume: 0.6, delay: 0.3, reverb: 0.2, pan: -0.35 },
     svg: (u) => `
       <defs><clipPath id="${u}-ew"><path d="M70 70 Q70 46 96 52 Q100 50 104 52 Q132 44 132 70 Q132 90 112 88 Q104 86 100 82 Q96 86 88 88 Q70 90 70 70 Z"/></clipPath></defs>
@@ -1595,8 +1637,9 @@ const CHARS = [
     id: 'pikachu', name: 'Pikachu', game: 'Pokémon', color: '#ffd935',
     vb: [0, 0, 200, 230], pivot: [100, 200], scaleAt: [100, 212], shadow: [100, 214, 50, 6], mouthAt: [100, 104],
     unit: 0.5, motion: { sway: 1.1, bob: 1.3, puff: 0.8 },
-    voice: { voiceType: 'soprano', wave: 'sawtooth', formantShift: 1.45, brightness: 2, bwScale: 1.2, vibratoRate: 7.5, vibratoDepth: 45, vibratoDelay: 0.12, jitter: 12, attack: 0.01, release: 0.15, glide: 0.02, vowelGlide: 0.03, breath: 0.2, lowNote: 69, range: 24, kbBase: 72 },
-    mix: { volume: 0.55, delay: 0.2, reverb: 0.25, pan: 0.5 },
+    // İmza: minicik ve cırtlak (formantlar çok yukarıda), hızlı titrek vibrato, 'pika!' düşüşü
+    voice: { voiceType: 'soprano', wave: 'sawtooth', formantShift: 1.6, brightness: 2, bwScale: 1.1, vibratoRate: 9, vibratoDepth: 60, vibratoDelay: 0.08, jitter: 15, attack: 0.004, release: 0.1, glide: 0.015, vowelGlide: 0.02, breath: 0.15, scoop: 300, scoopTime: 0.03, lowNote: 69, range: 24, kbBase: 72 },
+    mix: { volume: 0.8, delay: 0.2, reverb: 0.25, pan: 0.5 },
     svg: (u) => `
       <defs>
         <clipPath id="${u}-eaL" clipPathUnits="userSpaceOnUse"><ellipse cx="62" cy="34" rx="11" ry="31"/></clipPath>
@@ -1645,7 +1688,8 @@ const CHARS = [
     id: 'kirby', name: 'Kirby', game: 'Kirby', color: '#ff8fbd',
     vb: [0, 0, 200, 230], pivot: [100, 200], scaleAt: [100, 214], shadow: [100, 216, 60, 7], mouthAt: [100, 150],
     unit: 0.5, motion: { sway: 1, bob: 1.4, puff: 1.6 },
-    voice: { voiceType: 'soprano', wave: 'glottal', formantShift: 1.3, brightness: 0, bwScale: 1.4, vibratoRate: 5.5, vibratoDepth: 30, vibratoDelay: 0.25, jitter: 8, attack: 0.05, release: 0.3, glide: 0.04, vowelGlide: 0.06, breath: 0.25, lowNote: 64, range: 24, kbBase: 72 },
+    // İmza: yumuşak ve yuvarlak (karanlık üst formantlar), aşağıdan 'poyo' diye yükselir, hafif titreme
+    voice: { voiceType: 'alto', wave: 'glottal', formantShift: 1.35, brightness: -6, bwScale: 1.8, vibratoRate: 4.5, vibratoDepth: 25, vibratoDelay: 0.3, jitter: 8, attack: 0.05, release: 0.3, glide: 0.05, vowelGlide: 0.06, breath: 0.3, scoop: -200, scoopTime: 0.07, amRate: 5.5, amDepth: 0.18, lowNote: 64, range: 24, kbBase: 72 },
     mix: { volume: 0.75, delay: 0.15, reverb: 0.3, pan: -0.5 },
     svg: (u) => `
       <defs><radialGradient id="${u}-kp" cx="40%" cy="30%" r="75%"><stop offset="0" stop-color="#ffd3e4"/><stop offset=".6" stop-color="#f7a8c4"/><stop offset="1" stop-color="#e57aa3"/></radialGradient></defs>
@@ -1680,7 +1724,8 @@ const CHARS = [
     id: 'creeper', name: 'Creeper', game: 'Minecraft', color: '#6fd04c',
     vb: [0, 0, 200, 230], pivot: [100, 214], scaleAt: [100, 214], shadow: [100, 216, 56, 6], mouthAt: [100, 84],
     unit: 0.5, motion: { sway: 0.15, bob: 0.4, puff: 2.2 }, noBlink: true,
-    voice: { voiceType: 'tenor', wave: 'pulse', formantShift: 1.1, brightness: 6, bwScale: 1, vibratoRate: 6, vibratoDepth: 0, vibratoDelay: 0, jitter: 3, attack: 0.005, release: 0.12, glide: 0.01, vowelGlide: 0.02, breath: 1.8, lowNote: 48, range: 24, kbBase: 60 },
+    // İmza: fitil gibi tıslayan fısıltı ('sss') + arkada kısık bir vızıltı
+    voice: { voiceType: 'tenor', wave: 'pulse', formantShift: 1.1, brightness: 6, bwScale: 1, vibratoRate: 6, vibratoDepth: 0, vibratoDelay: 0, jitter: 3, attack: 0.005, release: 0.12, glide: 0.01, vowelGlide: 0.02, breath: 1.0, noiseHP: 1500, hiss: 0.35, tone: 0.55, lowNote: 48, range: 24, kbBase: 60 },
     mix: { volume: 0.5, delay: 0.1, reverb: 0.15, pan: 0.6 },
     svg: () => `
       <g class="feet">
@@ -1710,8 +1755,9 @@ const CHARS = [
     id: 'pacman', name: 'Pac-Man', game: 'Pac-Man', color: '#ffb800',
     vb: [0, 0, 200, 230], pivot: [96, 190], scaleAt: [96, 192], shadow: [96, 214, 50, 6], mouthAt: [130, 124],
     unit: 0.5, motion: { sway: 0.4, bob: 2.2, puff: 1 },
-    voice: { voiceType: 'tenor', wave: 'square', formantShift: 1, brightness: 4, bwScale: 3, vibratoRate: 6, vibratoDepth: 0, vibratoDelay: 0, jitter: 0, attack: 0.002, release: 0.05, glide: 0.003, vowelGlide: 0.015, breath: 0, lowNote: 57, range: 24, kbBase: 60 },
-    mix: { volume: 0.5, delay: 0.25, reverb: 0.1, pan: -0.6 },
+    // İmza: 8-bit kare dalga, bit indirgeme cızırtısı ve 'vaka-vaka' formant salınımı
+    voice: { voiceType: 'tenor', wave: 'square', formantShift: 1, brightness: 4, bwScale: 3, vibratoRate: 6, vibratoDepth: 0, vibratoDelay: 0, jitter: 0, attack: 0.001, release: 0.04, glide: 0.002, vowelGlide: 0.015, breath: 0, crush: 5, flfoRate: 7.5, flfoF1: 120, flfoF2: -350, lowNote: 57, range: 24, kbBase: 60 },
+    mix: { volume: 0.65, delay: 0.25, reverb: 0.1, pan: -0.6 },
     svg: (u) => `
       <defs><radialGradient id="${u}-pc" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#fff07a"/><stop offset=".6" stop-color="#ffd400"/><stop offset="1" stop-color="#f0a800"/></radialGradient></defs>
       <g class="pellets" fill="#ffd8b0"><circle cx="160" cy="124" r="5"/><circle cx="178" cy="124" r="5"/><circle cx="196" cy="124" r="5"/></g>
@@ -1960,12 +2006,12 @@ class Bubbles {
 /* =====================================================================
    12. UYGULAMA DURUMU (kaydedilen şarkı verisi dahil)
    ===================================================================== */
-const STORE_KEY = 'oyun-korosu-v1';
+const STORE_KEY = 'oyun-korosu-v2';   // kadro değişince eski kayıtlar karışmasın diye v2
 const app = {
   ctx: null,
   engine: null,
   recorder: null,
-  selected: 'isil',
+  selected: 'mcqueen',
   scale: 'off',
   root: 0,
   fx: { volume: 0.8, delayTime: 0.41, feedback: 0.35, reverbSize: 2.6 },
@@ -2047,7 +2093,7 @@ function loadSong() {
 
 /* ---------- Demo şarkı: La minör, 110 BPM, 2 ölçü, akorlar Am – F – C – G ----------
    Her karakterin bir rolü var: Sans bas, Pac-Man 8-bit arpej, Kirby ana melodi,
-   Işıl "uuu" pad, Sonic senkoplu vuruşlar, Creeper tıslayan hi-hat, Pikachu "pi-ka"
+   McQueen "ooo" pad ve sonda "ka-chow!", Sonic senkoplu vuruşlar, Creeper tıslayan hi-hat, Pikachu "pi-ka"
    süslemeleri, Hornet "Shaw!" çıkışları. */
 function demoSong() {
   const N = (step, len, midi, vowel, vel = 0.85) => ({ step, len, midi, vowel, vel });
@@ -2055,13 +2101,13 @@ function demoSong() {
   const arps = [[69, 72, 76, 72], [65, 69, 72, 69], [72, 76, 79, 76], [67, 71, 74, 71]];
   const sonic = [[60, 64], [57, 60], [64, 67], [59, 62]];
   const pad = [64, 65, 64, 62];
-  const notes = { isil: [], sans: [], hornet: [], sonic: [], pikachu: [], kirby: [], creeper: [], pacman: [] };
+  const notes = { mcqueen: [], sans: [], hornet: [], sonic: [], pikachu: [], kirby: [], creeper: [], pacman: [] };
   for (let c = 0; c < 4; c++) {
     const b = c * 8, r = roots[c];
     notes.sans.push(N(b, 3, r, 4), N(b + 4, 2, r + 12, 3, 0.75), N(b + 6, 2, r, 0, 0.8));
     arps[c].forEach((m, i) => notes.pacman.push(N(b + i * 2, 1, m, i % 2 ? 3 : 0, 0.7)));
     notes.sonic.push(N(b + 3, 1, sonic[c][0], 0, 0.8), N(b + 6, 1, sonic[c][1], 1, 0.7));
-    notes.isil.push(N(b, 7, pad[c], 4, 0.7));
+    notes.mcqueen.push(N(b, c === 3 ? 5 : 7, pad[c], 3, 0.6));
     notes.creeper.push(N(b + 2, 1, 72, 2, 0.6), N(b + 6, 1, 72, 2, 0.6));
   }
   notes.kirby.push(N(0, 2, 76, 0), N(2, 1, 74, 1), N(3, 1, 72, 2), N(4, 4, 76, 3),
@@ -2070,6 +2116,7 @@ function demoSong() {
     N(24, 2, 74, 0), N(26, 2, 71, 2), N(28, 2, 74, 3), N(30, 2, 76, 4));
   notes.pikachu.push(N(14, 1, 88, 2, 0.75), N(15, 1, 84, 0, 0.75), N(30, 1, 86, 2, 0.75), N(31, 1, 83, 0, 0.75));
   notes.hornet.push(N(12, 2, 81, 0, 0.8), N(28, 2, 83, 0, 0.8));
+  notes.mcqueen.push(N(30, 1, 67, 0, 0.85), N(31, 1, 72, 3, 0.9));   // "ka-chow!"
   return notes;
 }
 function loadDemo() {
@@ -2840,7 +2887,7 @@ const ui = {
       const card = document.createElement('div');
       card.className = 'card';
       card.style.setProperty('--c', def.color);
-      card.innerHTML = `<button class="pick" aria-pressed="false" title="${def.name} (${def.game})"><div class="av"></div><b class="nm">${def.name}</b><small class="gm">${def.game}</small></button>
+      card.innerHTML = `<button class="pick" aria-pressed="false" title="${def.full || def.name} (${def.game})"><div class="av"></div><b class="nm">${def.name}</b><small class="gm">${def.game}</small></button>
         <div class="meter"><i></i></div>
         <div class="ms"><button class="m" aria-pressed="false" title="Sessiz (mute)">M</button><button class="s" aria-pressed="false" title="Solo">S</button><span class="bd"></span></div>`;
       band.appendChild(card);
@@ -2934,9 +2981,9 @@ const ui = {
       c.el.classList.toggle('sel', d.id === app.selected);
       c.pick.setAttribute('aria-pressed', String(d.id === app.selected));
     }
-    $('npName').textContent = def.name;
+    $('npName').textContent = def.full || def.name;
     $('npGame').textContent = def.game;
-    $('charTitle').textContent = def.name;
+    $('charTitle').textContent = def.full || def.name;
     $('rollWho').textContent = def.name;
     app.big = new Avatar($('bigAvatar'), def);
     requestAnimationFrame(() => app.big && app.big.measure());

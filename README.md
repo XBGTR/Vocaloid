@@ -1,14 +1,27 @@
 # Oyun Korosu
 
-Tarayıcıda şarkı söyleyen, animasyonlu bir sanal vokal grubu. Kadroda oyun dünyasının ünlü karakterleri var: **Sans** (Undertale), **Hornet** (Hollow Knight), **Sonic**, **Pikachu**, **Kirby**, **Creeper** (Minecraft) ve **Pac-Man**. Ev sahibi ise projenin ilk karakteri, fener balığı **Işıl**. Her karakteri ayrı ayrı şarkı söyletebilir, nota dizip döngü kaydederek hepsini aynı şarkıda birleştirebilirsin.
+Tarayıcıda şarkı söyleyen, animasyonlu bir sanal vokal grubu. Kadroda oyun ve animasyon dünyasının ünlü karakterleri var: **Şimşek McQueen** (Cars), **Sans** (Undertale), **Hornet** (Hollow Knight), **Sonic**, **Pikachu**, **Kirby**, **Creeper** (Minecraft) ve **Pac-Man**. Her karakteri ayrı ayrı şarkı söyletebilir, nota dizip döngü kaydederek hepsini aynı şarkıda birleştirebilirsin.
 
 Hiçbir ses dosyası kullanılmıyor. Sesler, Web Audio API ile **formant sentezi** kullanılarak gerçek zamanlı üretiliyor. Tüm site tek bir `index.html` dosyası; framework ya da kütüphane yok (yalnızca başlıklar için Google Fonts'tan "Pixelify Sans" yazı tipi).
 
-> Hayran yapımı, ticari olmayan bir projedir; resmî değildir. Karakterler ve isimleri sahiplerine aittir: Toby Fox, Team Cherry, SEGA, The Pokémon Company / Nintendo, Nintendo / HAL Laboratory, Mojang / Microsoft, Bandai Namco.
+> Hayran yapımı, ticari olmayan bir projedir; resmî değildir. Karakterler ve isimleri sahiplerine aittir: Disney / Pixar, Toby Fox, Team Cherry, SEGA, The Pokémon Company / Nintendo, Nintendo / HAL Laboratory, Mojang / Microsoft, Bandai Namco.
 
 ## Özellikler
 
-- **8 karakterlik koro:** Her karakter SVG ile çizildi ve kendi sesine sahip. Sans pes bir bariton, Hornet keskin bir soprano, Pikachu ve Kirby cırtlak/yumuşak tiz sesler, Creeper tıslayan bir robot, Pac-Man 8-bit kare dalga. Ağızlar kendi kanallarının sesine ve ünlüsüne göre oynar; göz kırpma, nefes alma, sesle sallanma var. Sans'ın gözü parlar, Pikachu'nun yanakları kıvılcım saçar, Creeper gür seste yanıp söner, Pac-Man'in ağız açısı ünlüye göre değişir.
+- **8 karakterlik koro:** Her karakter SVG ile çizildi. Ağızlar kendi kanallarının sesine ve ünlüsüne göre oynar; göz kırpma, nefes alma, sesle sallanma var. Karaktere özel ayrıntılar:
+  - McQueen'in gözleri ön camda, ağzı tamponda; sesle kasası titreyip yaylanır.
+  - Hornet oyundaki gibi ağızsızdır; hece gözlerinin biçiminden belli olur, pelerini ve ipek ipi sesle dalgalanır.
+  - Sans'ın gözü parlar, Pikachu'nun yanakları kıvılcım saçar.
+  - Creeper gür seste yanıp söner, Pac-Man'in ağız açısı ünlüye göre değişir.
+- **Herkesin kendine özgü sesi (imza):** Karakterler aynı formant motorunu kullanır ama her birine sesleri karışmasın diye bir imza eklendi:
+  - **McQueen:** 31 Hz'lik "motor gürlemesi" (genlik modülasyonu); notaya aşağıdan "vroom" diye kayarak girer.
+  - **Sans:** Kuru ve pes; kare dalgalı 23 Hz modülasyonla kemik tıkırtısı, vibrato yok.
+  - **Hornet:** Çok nefesli ve kısa; notaya yukarıdan düşerek girer ("Shaw!").
+  - **Sonic:** Üç hafif akortsuz osilatörle kalın, parlak ve kendinden emin.
+  - **Pikachu:** Formantları çok yukarıda, hızlı titrek vibrato, "pika!" düşüşü.
+  - **Kirby:** Koyu, yuvarlak tını, aşağıdan "poyo" yükselişi, yavaş titreme.
+  - **Creeper:** Çoğunlukla fitil gibi tıslama; arkada kısık bir vızıltı.
+  - **Pac-Man:** 8-bit kare dalga, bit indirgeme cızırtısı ve "vaka-vaka" formant salınımı.
 - **Karakter kanalları:** Her karakterin ayrı ses seviyesi, eko ve yankı gönderimi, sessiz (M) ve solo (S) düğmesi var.
 - **Stüdyo:**
   - Çal/Dur, tempo (60–180 BPM), 1/2/4 ölçülük döngü ve metronom.
