@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#050b1a" />
+<title>Işıl · Derinlerin Sesi</title>
+<meta name="description" content="Tarayıcıda gerçek zamanlı formant sentezi ile şarkı söyleyen fener balığı Işıl." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='38' r='22' fill='%236650e0'/%3E%3Cpath d='M32 17 C34 8 44 4 50 8' stroke='%234a37b8' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='50' cy='8' r='6' fill='%233ff2dc'/%3E%3Ccircle cx='25' cy='34' r='5' fill='%23fff'/%3E%3Ccircle cx='39' cy='34' r='5' fill='%23fff'/%3E%3Cellipse cx='32' cy='47' rx='6' ry='5' fill='%232b0f3f'/%3E%3C/svg%3E" />
+<style>
+  :root {
+    --bg-0: #03060f;
+    --bg-1: #071530;
+    --panel: rgba(13, 24, 54, 0.72);
+    --panel-solid: #0d1836;
+    --panel-border: rgba(130, 165, 255, 0.16);
+    --text: #e8edff;
+    --muted: #8f9cc6;
+    --teal: #3ff2dc;
+    --violet: #8f7cff;
+    --gold: #ffd36e;
+    --pink: #ff7eb6;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh;
+    background: radial-gradient(ellipse 120% 80% at 50% -10%, #133371 0%, #081a3d 38%, #040a1a 72%, var(--bg-0) 100%) fixed var(--bg-0);
+    color: var(--text);
+    font-family: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    line-height: 1.5;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button { font: inherit; color: inherit; }
+
+  .app { position: relative; z-index: 1; max-width: 1220px; margin: 0 auto; padding: 16px 16px 40px; }
+
+  /* ---------- Başlık ---------- */
+  header.top { display: flex; align-items: center; gap: 14px; margin: 4px 0 16px; }
+  .logo { width: 44px; height: 44px; flex: none; }
+  header.top h1 { margin: 0; font-size: clamp(22px, 3vw, 30px); letter-spacing: 0.5px; }
+  header.top h1 span { color: var(--teal); }
+  header.top p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  /* ---------- Ana düzen: sahne + XY alanı ---------- */
+  .main-grid { display: grid; grid-template-columns: minmax(300px, 5fr) 7fr; gap: 16px; }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+  }
+  .stage { position: relative; height: 480px; }
+  .stage svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .readout {
+    position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%);
+    padding: 4px 14px; border-radius: 999px;
+    background: rgba(5, 12, 30, 0.7); border: 1px solid var(--panel-border);
+    font-variant-numeric: tabular-nums; font-size: 15px; color: var(--muted); white-space: nowrap;
+  }
+  .readout b { color: var(--text); }
+
+  .pad-wrap { position: relative; height: 480px; overflow: hidden;
+    background:
+      radial-gradient(ellipse at 50% 120%, rgba(63, 242, 220, 0.12), transparent 60%),
+      linear-gradient(180deg, #0b1a3f 0%, #081331 100%);
+  }
+  #pad { display: block; width: 100%; height: 100%; touch-action: none; cursor: crosshair; user-select: none; -webkit-user-select: none; }
+  .pad-hint {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    pointer-events: none; text-align: center; color: rgba(232, 237, 255, 0.55); font-size: 15px;
+    transition: opacity 0.6s;
+  }
+  .pad-hint.hidden { opacity: 0; }
+
+  /* ---------- Başlat ekranı ---------- */
+  .start {
+    position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 16px;
+    background: radial-gradient(ellipse at 50% 30%, rgba(19, 51, 113, 0.92), rgba(3, 6, 15, 0.97) 70%);
+    transition: opacity 0.6s, visibility 0.6s;
+  }
+  .start.hidden { opacity: 0; visibility: hidden; }
+  .start-card { max-width: 440px; text-align: center; }
+  .start-card svg { width: 140px; height: 140px; }
+  .start-card h2 { margin: 6px 0 4px; font-size: 40px; }
+  .start-card p { margin: 0 0 22px; color: var(--muted); }
+  .btn-primary {
+    border: 0; cursor: pointer; padding: 14px 28px; border-radius: 999px; font-size: 18px; font-weight: 700;
+    color: #04121a; background: linear-gradient(135deg, var(--teal), #8ff7a8);
+    box-shadow: 0 0 0 0 rgba(63, 242, 220, 0.6); animation: pulse 2.2s infinite;
+  }
+  .btn-primary:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(63,242,220,.55);} 70% { box-shadow: 0 0 0 22px rgba(63,242,220,0);} 100% { box-shadow: 0 0 0 0 rgba(63,242,220,0);} }
+  .start small { display: block; margin-top: 16px; color: var(--muted); }
+
+  @media (max-width: 860px) {
+    .main-grid { grid-template-columns: 1fr; gap: 10px; }
+    .stage { height: clamp(220px, 34vh, 340px); }
+    .pad-wrap { height: clamp(300px, 54vh, 520px); }
+    header.top { margin-bottom: 8px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .btn-primary { animation: none; } }
+</style>
+</head>
+<body>
+
+<!-- ============ BAŞLAT EKRANI: tarayıcılar sesi ancak kullanıcı etkileşiminden sonra açar ============ -->
+<div class="start" id="start">
+  <div class="start-card">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="38" r="22" fill="#6650e0"/>
+      <path d="M32 17 C34 8 44 4 50 8" stroke="#4a37b8" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="50" cy="8" r="9" fill="#3ff2dc" opacity=".25"/>
+      <circle cx="50" cy="8" r="5" fill="#3ff2dc"/>
+      <circle cx="25" cy="34" r="5.5" fill="#fff"/><circle cx="39" cy="34" r="5.5" fill="#fff"/>
+      <circle cx="25.5" cy="34.5" r="3" fill="#1a1240"/><circle cx="39.5" cy="34.5" r="3" fill="#1a1240"/>
+      <path d="M27 46 Q32 50 37 46" stroke="#2b0f3f" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </svg>
+    <h2>Işıl</h2>
+    <p>Derin denizin şarkıcı fener balığı uyuyor.<br />Uyandır ve onu parmağınla şarkı söylet.</p>
+    <button class="btn-primary" id="startBtn">▶ Işıl'ı uyandır</button>
+    <small>Sesini aç · kulaklıkla daha güzel</small>
+  </div>
+</div>
+
+<div class="app">
+  <header class="top">
+    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="38" r="22" fill="#6650e0"/>
+      <path d="M32 17 C34 8 44 4 50 8" stroke="#4a37b8" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="50" cy="8" r="5" fill="#3ff2dc"/>
+      <circle cx="25" cy="34" r="5" fill="#fff"/><circle cx="39" cy="34" r="5" fill="#fff"/>
+      <ellipse cx="32" cy="47" rx="5" ry="4" fill="#2b0f3f"/>
+    </svg>
+    <div>
+      <h1>Işıl <span>· Derinlerin Sesi</span></h1>
+      <p>Mariana Çukuru'nun şarkıcı fener balığı — sesi tarayıcında, gerçek zamanlı sentezleniyor.</p>
+    </div>
+  </header>
+
+  <div class="main-grid">
+    <!-- ============ SAHNE: SVG ile çizilmiş karakter ============ -->
+    <section class="stage" aria-label="Işıl">
+      <svg id="isil" viewBox="-10 -45 420 475" role="img" aria-label="Şarkı söyleyen fener balığı Işıl">
+        <defs>
+          <radialGradient id="gBody" cx="38%" cy="28%" r="78%">
+            <stop class="body-hi" offset="0" stop-color="#a596ff"/>
+            <stop class="body-mid" offset="0.55" stop-color="#6650e0"/>
+            <stop class="body-lo" offset="1" stop-color="#2c1f8c"/>
+          </radialGradient>
+          <radialGradient id="gBelly" cx="50%" cy="30%" r="70%">
+            <stop offset="0" stop-color="#e2dbff" stop-opacity="0.75"/>
+            <stop offset="1" stop-color="#b3a4ff" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="gFin" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#7b67f0"/>
+            <stop offset="1" stop-color="#3ff2dc" stop-opacity="0.75"/>
+          </linearGradient>
+          <radialGradient id="gSpot">
+            <stop offset="0" stop-color="#e6fffb"/>
+            <stop offset="0.35" stop-color="#3ff2dc"/>
+            <stop offset="1" stop-color="#3ff2dc" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="gHalo">
+            <stop class="lantern" offset="0" stop-color="#3ff2dc" stop-opacity="0.85"/>
+            <stop class="lantern" offset="0.3" stop-color="#3ff2dc" stop-opacity="0.3"/>
+            <stop class="lantern" offset="1" stop-color="#3ff2dc" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="gBulb" cx="40%" cy="35%" r="70%">
+            <stop offset="0" stop-color="#ffffff"/>
+            <stop class="lantern" offset="0.5" stop-color="#3ff2dc"/>
+            <stop class="lantern-dark" offset="1" stop-color="#139c8c"/>
+          </radialGradient>
+          <radialGradient id="gIris" cx="50%" cy="38%" r="62%">
+            <stop offset="0" stop-color="#161038"/>
+            <stop offset="0.72" stop-color="#2b1e70"/>
+            <stop offset="1" stop-color="#3ff2dc"/>
+          </radialGradient>
+          <clipPath id="clipEyeL"><circle cx="148" cy="212" r="37"/></clipPath>
+          <clipPath id="clipEyeR"><circle cx="252" cy="212" r="37"/></clipPath>
+          <clipPath id="clipMouth" clipPathUnits="userSpaceOnUse"><path id="mouthClip" d="M-20 0 L20 0 Z"/></clipPath>
+        </defs>
+
+        <ellipse id="shadow" cx="200" cy="412" rx="112" ry="10" fill="#000" opacity="0.35"/>
+
+        <g id="fish">
+          <!-- Kuyruk ve yüzgeçler gövdenin arkasında -->
+          <g id="tail" transform="translate(292 338)">
+            <path d="M0 0 C28 -8 58 -40 86 -34 C72 -4 76 28 92 50 C62 46 30 30 0 14 Z" fill="url(#gFin)" stroke="#2c1f8c" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M10 6 L74 -24 M12 9 L78 14 M10 12 L76 42" stroke="#2c1f8c" stroke-width="2" opacity="0.45"/>
+          </g>
+          <g id="finL" transform="translate(80 272)">
+            <path d="M0 0 C-28 -22 -68 -14 -80 14 C-62 22 -42 36 -22 42 C-10 30 -2 14 0 0 Z" fill="url(#gFin)" stroke="#2c1f8c" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M-4 6 L-66 8 M-6 12 L-46 32 M-6 18 L-26 36" stroke="#2c1f8c" stroke-width="2" opacity="0.45"/>
+          </g>
+          <g id="finR" transform="translate(320 272) scale(-1 1)">
+            <path d="M0 0 C-28 -22 -68 -14 -80 14 C-62 22 -42 36 -22 42 C-10 30 -2 14 0 0 Z" fill="url(#gFin)" stroke="#2c1f8c" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M-4 6 L-66 8 M-6 12 L-46 32 M-6 18 L-26 36" stroke="#2c1f8c" stroke-width="2" opacity="0.45"/>
+          </g>
+
+          <!-- Fener sapı (ucu yay gibi geride kalır) -->
+          <path id="stalk" d="M200 130 C205 60 250 30 292 46" stroke="#4a37b8" stroke-width="7" fill="none" stroke-linecap="round"/>
+
+          <!-- Gövde -->
+          <ellipse id="body" cx="200" cy="255" rx="138" ry="130" fill="url(#gBody)" stroke="#2c1f8c" stroke-width="4"/>
+          <ellipse cx="200" cy="322" rx="98" ry="58" fill="url(#gBelly)"/>
+
+          <!-- Biyolüminesan benekler -->
+          <g id="spots">
+            <circle cx="92" cy="226" r="11" fill="url(#gSpot)"/>
+            <circle cx="106" cy="306" r="8" fill="url(#gSpot)"/>
+            <circle cx="308" cy="226" r="11" fill="url(#gSpot)"/>
+            <circle cx="294" cy="306" r="8" fill="url(#gSpot)"/>
+            <circle cx="150" cy="150" r="7" fill="url(#gSpot)"/>
+            <circle cx="250" cy="150" r="7" fill="url(#gSpot)"/>
+            <circle cx="200" cy="368" r="8" fill="url(#gSpot)"/>
+          </g>
+
+          <!-- Yanaklar -->
+          <ellipse id="cheekL" cx="110" cy="282" rx="22" ry="12" fill="#ff7eb6" opacity="0.3"/>
+          <ellipse id="cheekR" cx="290" cy="282" rx="22" ry="12" fill="#ff7eb6" opacity="0.3"/>
+
+          <!-- Gözler: göz kapağı (lid) göz dairesiyle kırpılır, aşağı inerek kırpma yapar -->
+          <g id="eyeL">
+            <circle cx="148" cy="212" r="37" fill="#f4f6ff"/>
+            <g clip-path="url(#clipEyeL)">
+              <g class="pupil">
+                <circle cx="148" cy="214" r="24" fill="url(#gIris)"/>
+                <circle cx="148" cy="214" r="12" fill="#07051a"/>
+                <circle cx="139" cy="204" r="7" fill="#fff"/>
+                <circle cx="156" cy="221" r="3" fill="#fff" opacity="0.8"/>
+              </g>
+              <g class="lid">
+                <rect x="104" y="95" width="88" height="80" fill="#5b46d8"/>
+                <path d="M104 175 Q148 186 192 175" stroke="#22146a" stroke-width="3.5" fill="none"/>
+              </g>
+            </g>
+            <circle cx="148" cy="212" r="37" fill="none" stroke="#22146a" stroke-width="3.5"/>
+          </g>
+          <g id="eyeR">
+            <circle cx="252" cy="212" r="37" fill="#f4f6ff"/>
+            <g clip-path="url(#clipEyeR)">
+              <g class="pupil">
+                <circle cx="252" cy="214" r="24" fill="url(#gIris)"/>
+                <circle cx="252" cy="214" r="12" fill="#07051a"/>
+                <circle cx="243" cy="204" r="7" fill="#fff"/>
+                <circle cx="260" cy="221" r="3" fill="#fff" opacity="0.8"/>
+              </g>
+              <g class="lid">
+                <rect x="208" y="95" width="88" height="80" fill="#5b46d8"/>
+                <path d="M208 175 Q252 186 296 175" stroke="#22146a" stroke-width="3.5" fill="none"/>
+              </g>
+            </g>
+            <circle cx="252" cy="212" r="37" fill="none" stroke="#22146a" stroke-width="3.5"/>
+          </g>
+
+          <!-- Kaşlar: tiz notalarda kalkar -->
+          <path id="browL" d="M116 160 Q146 146 176 158" stroke="#22146a" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path id="browR" d="M224 158 Q254 146 284 160" stroke="#22146a" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+          <!-- Ağız: şekli her karede ünlüye ve ses şiddetine göre yeniden hesaplanır -->
+          <g id="mouthG" transform="translate(200 300)">
+            <path id="mouthFill" d="M-20 0 L20 0 Z" fill="#2b0f3f"/>
+            <g clip-path="url(#clipMouth)">
+              <ellipse id="tongue" cx="0" cy="20" rx="18" ry="10" fill="#ff6f9a"/>
+              <path id="teeth" d="M-17 0 L-12 9 L-7 0 Z M7 0 L12 9 L17 0 Z" fill="#fff"/>
+            </g>
+            <path id="mouthLine" d="M-20 0 L20 0 Z" fill="none" stroke="#22146a" stroke-width="4" stroke-linejoin="round"/>
+          </g>
+
+          <!-- Fener topu -->
+          <g id="bulb" transform="translate(292 46)">
+            <circle id="halo" r="78" fill="url(#gHalo)" opacity="0.5"/>
+            <circle r="16" fill="url(#gBulb)" stroke="#2c1f8c" stroke-width="2.5"/>
+            <circle cx="-5" cy="-6" r="4.5" fill="#fff" opacity="0.9"/>
+          </g>
+        </g>
+      </svg>
+      <div class="readout" id="readout">Işıl uykuda…</div>
+    </section>
+
+    <!-- ============ XY ALANI ============ -->
+    <section class="panel pad-wrap" aria-label="Ses alanı: yatay eksen perde, dikey eksen ünlü harf">
+      <canvas id="pad"></canvas>
+      <div class="pad-hint" id="padHint">Basılı tut ve gezdir<br /><small>← pes · tiz → &nbsp;|&nbsp; ↑ A … U ↓</small></div>
+    </section>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* =====================================================================
+   IŞIL — formant sentezli sanal vokalist
+   ---------------------------------------------------------------------
+   İnsan sesi kabaca iki parçadan oluşur (kaynak–filtre modeli):
+     1) KAYNAK: ses telleri, perdesi (f0) olan, harmonikçe zengin bir
+        vızıltı üretir. Biz bunu testere dişi / darbe dalgası ile taklit
+        ediyoruz; üstüne biraz "nefes" gürültüsü ekliyoruz.
+     2) FİLTRE: ağız-gırtlak boşluğu bu vızıltının bazı frekanslarını
+        güçlendirir. Bu rezonans tepelerine FORMANT denir. "a" ile "i"
+        arasındaki farkı perde değil, formantların yeri belirler.
+   Biz her ses için 3 paralel bant geçiren (bandpass) filtre kullanıp
+   formant frekanslarını ünlüye göre yumuşakça kaydırıyoruz.
+   ===================================================================== */
+
+// ---------- 1. Küçük yardımcılar ----------
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);       // MIDI nota → Hz
+const dbToGain = (db) => Math.pow(10, db / 20);              // desibel → doğrusal kazanç
+const smooth = (dt, tau) => 1 - Math.exp(-dt / tau);         // kare hızından bağımsız yumuşatma katsayısı
+const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+const noteName = (m) => { const r = Math.round(m); return NOTE_NAMES[((r % 12) + 12) % 12] + (Math.floor(r / 12) - 1); };
+const VOWELS = ['a', 'e', 'i', 'o', 'u'];
+
+// ---------- 2. Formant tabloları ----------
+// Her ünlü için: [F1,F2,F3] Hz, [genlik dB], [bant genişliği Hz].
+// Değerler klasik şarkıcı ölçümlerinden (Csound formant tablosu) alındı.
+const FORMANT_TABLES = {
+  bass: {
+    a: [[600, 1040, 2250], [0, -7, -9], [60, 70, 110]],
+    e: [[400, 1620, 2400], [0, -12, -9], [40, 80, 100]],
+    i: [[250, 1750, 2600], [0, -30, -16], [60, 90, 100]],
+    o: [[400, 750, 2400], [0, -11, -21], [40, 80, 100]],
+    u: [[350, 600, 2400], [0, -20, -32], [40, 80, 100]],
+  },
+  tenor: {
+    a: [[650, 1080, 2650], [0, -6, -7], [80, 90, 120]],
+    e: [[400, 1700, 2600], [0, -14, -12], [70, 80, 100]],
+    i: [[290, 1870, 2800], [0, -15, -18], [40, 90, 100]],
+    o: [[400, 800, 2600], [0, -10, -12], [40, 80, 100]],
+    u: [[350, 600, 2700], [0, -20, -17], [40, 60, 100]],
+  },
+  alto: {
+    a: [[800, 1150, 2800], [0, -4, -20], [80, 90, 120]],
+    e: [[400, 1600, 2700], [0, -24, -30], [60, 80, 120]],
+    i: [[350, 1700, 2700], [0, -20, -30], [50, 100, 120]],
+    o: [[450, 800, 2830], [0, -9, -16], [70, 80, 100]],
+    u: [[325, 700, 2530], [0, -12, -30], [50, 60, 170]],
+  },
+  soprano: {
+    a: [[800, 1150, 2900], [0, -6, -32], [80, 90, 120]],
+    e: [[350, 2000, 2800], [0, -20, -15], [60, 100, 120]],
+    i: [[270, 2140, 2950], [0, -12, -26], [60, 90, 100]],
+    o: [[450, 800, 2830], [0, -11, -22], [70, 80, 100]],
+    u: [[325, 700, 2700], [0, -16, -35], [50, 60, 170]],
+  },
+};
+
+// Varsayılan ses karakteri (sonra ön ayarlarla değişecek)
+const DEFAULT_PARAMS = {
+  voiceType: 'alto',   // hangi formant tablosu
+  formantShift: 1.0,   // tüm formantları çarpar (>1: daha küçük "kafa", çocuksu ses)
+  wave: 'sawtooth',    // kaynak dalga biçimi
+  breath: 0.35,        // nefes gürültüsü miktarı
+  brightness: 0,       // üst formantlara eklenen dB (parlaklık)
+  bwScale: 1.25,       // formant bant genişliği çarpanı (büyük = daha yumuşak/dolgun)
+  unison: 1,           // ses başına osilatör sayısı (koro etkisi)
+  unisonDetune: 0,     // unison sesler arası akort farkı (cent)
+  vibratoRate: 5.6,    // Hz
+  vibratoDepth: 35,    // cent (100 cent = yarım ton)
+  vibratoDelay: 0.35,  // vibrato bu kadar saniye sonra başlar (doğal şarkıcı davranışı)
+  jitter: 7,           // yavaş, rastgele perde dalgalanması (cent)
+  attack: 0.08,        // saniye
+  release: 0.35,       // saniye
+  glide: 0.035,        // perde geçiş zaman sabiti (portamento)
+  vowelGlide: 0.05,    // formant geçiş zaman sabiti
+  lowNote: 55,         // XY alanının sol kenarı (G3)
+  range: 24,           // XY alanının kapsadığı yarım ton sayısı
+};
+
+// Formant çıkış kazancını makul seviyeye getiren sabit (deneme ile ayarlandı)
+const FORMANT_OUT = 0.7;
+const NOISE_LEVEL = 2.0;
+
+/* Bir ünlü konumu (0=a … 4=u, ara değerler karışım) ve perde için
+   3 formantın frekans / Q / kazanç değerlerini hesaplar. */
+function computeFormants(P, vowelPos, f0) {
+  const table = FORMANT_TABLES[P.voiceType] || FORMANT_TABLES.alto;
+  const v = clamp(vowelPos, 0, 4);
+  const i0 = Math.min(3, Math.floor(v));
+  const t = v - i0;
+  const A = table[VOWELS[i0]], B = table[VOWELS[i0 + 1]];
+  const out = [];
+  let prevF = 0;
+  for (let k = 0; k < 3; k++) {
+    // Frekanslar logaritmik (kulağa doğal gelen) şekilde ara değerlenir
+    let F = Math.exp(lerp(Math.log(A[0][k]), Math.log(B[0][k]), t)) * P.formantShift;
+    const db = lerp(A[1][k], B[1][k], t) + P.brightness * k;
+    let bw = lerp(A[2][k], B[2][k], t) * P.bwScale * P.formantShift;
+    // Formant izleme: soprano tiz notalarda F1'i perdenin üstüne taşır,
+    // yoksa temel frekans filtrenin dışında kalır ve ses cılızlaşır.
+    if (k === 0) F = Math.max(F, f0 * 1.05);
+    else F = Math.max(F, prevF * 1.3);
+    bw = Math.max(bw, f0 * 0.5);
+    prevF = F;
+    // Testere dişinin n. harmoniği 1/n güçtedir; (F/f0) çarpanı bu eğimi
+    // telafi eder, böylece tablodaki dB değerleri "çıkıştaki" tepe olur.
+    out.push({ F, Q: F / bw, gain: dbToGain(db) * (F / f0) * FORMANT_OUT });
+  }
+  return out;
+}
+
+// ---------- 3. Ses kaynakları için tablolar ----------
+// Kendi dalga biçimlerimizi Fourier katsayılarıyla (PeriodicWave) kuruyoruz.
+function buildWaves(ctx) {
+  const N = 96;
+  const make = (fnReal, fnImag) => {
+    const re = new Float32Array(N), im = new Float32Array(N);
+    for (let n = 1; n < N; n++) { re[n] = fnReal(n); im[n] = fnImag(n); }
+    return ctx.createPeriodicWave(re, im);
+  };
+  const duty = 0.22;
+  return {
+    // "Gırtlak" dalgası: harmonikler 1/n^1.35 ile düşer → testere dişinden yumuşak
+    glottal: make(() => 0, (n) => 1 / Math.pow(n, 1.35)),
+    // Darbe dalgası (doluluk %22): genizden, "robotik" bir tını
+    pulse: make((n) => Math.sin(Math.PI * n * duty) / n, () => 0),
+    // Kare dalga: yalnız tek harmonikler → oyuk, klarnet benzeri
+    square: make(() => 0, (n) => (n % 2 ? 1 / n : 0)),
+  };
+}
+
+// Beyaz gürültü: nefes sesinin hammaddesi
+function makeNoiseBuffer(ctx, seconds) {
+  const len = Math.floor(ctx.sampleRate * seconds);
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  return buf;
+}
+
+/* "Kayma" tamponu: yavaş, pürüzsüz rastgele bir eğri (-1…1).
+   Frekanslar 0.25 Hz'in katı seçildi, böylece 4 sn'lik döngü dikişsiz. */
+function makeDriftBuffer(ctx, seconds = 4) {
+  const len = Math.floor(ctx.sampleRate * seconds);
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  const parts = [[0.75, 0.5], [1.75, 0.3], [3.25, 0.15], [5.5, 0.07]].map(([f, a]) => [f, a, Math.random() * Math.PI * 2]);
+  let peak = 0;
+  for (let i = 0; i < len; i++) {
+    const t = i / ctx.sampleRate;
+    let s = 0;
+    for (const [f, a, ph] of parts) s += a * Math.sin(2 * Math.PI * f * t + ph);
+    d[i] = s;
+    peak = Math.max(peak, Math.abs(s));
+  }
+  for (let i = 0; i < len; i++) d[i] /= peak;
+  return buf;
+}
+
+/* =====================================================================
+   4. TEK BİR SES (Voice)
+   Sinyal akışı:
+     [osilatör(ler)] ─┐
+     [nefes gürültüsü]┴→ kaynak → ┬→ bandpass F1 → kazanç ─┐
+                                  ├→ bandpass F2 → kazanç ─┼→ titreşim → zarf → pan → çıkış
+                                  └→ bandpass F3 → kazanç ─┘
+   Perdeyi oynatanlar (osc.detune'a bağlı):
+     vibrato LFO (sinüs, gecikmeli başlar) + kayma tamponu (jitter)
+   ===================================================================== */
+class Voice {
+  constructor(engine, opts) {
+    const ctx = (this.ctx = engine.ctx);
+    const P = (this.P = { ...engine.params });   // ses başladığı andaki ayarların kopyası
+    this.engine = engine;
+    this.targetMidi = this.appliedMidi = this.vibAnchor = opts.midi;
+    this.targetVowel = this.appliedVowel = opts.vowel;
+    this.bend = 0;
+    this.velocity = opts.velocity ?? 1;
+    this.released = false;
+    this.dirty = false;
+    this.sources = [];   // durdurulacak tüm kaynak düğümleri
+    this.nodes = [];     // temizlenecek tüm düğümler
+
+    const reg = (n) => (this.nodes.push(n), n);
+    const f0 = mtof(opts.midi);
+
+    // --- KAYNAK ---
+    this.source = reg(ctx.createGain());
+
+    // Vibrato: düşük frekanslı sinüs (LFO) → derinlik (cent) → osilatör detune
+    this.lfo = reg(ctx.createOscillator());
+    this.lfo.type = 'sine';
+    this.lfo.frequency.value = P.vibratoRate * (0.96 + Math.random() * 0.08);
+    this.vibDepth = reg(ctx.createGain());
+    this.vibDepth.gain.value = 0;
+    this.lfo.connect(this.vibDepth);
+    this.sources.push(this.lfo);
+
+    // Titreşim (shimmer): genlikte çok küçük, yavaş dalgalanma
+    this.shimmer = reg(ctx.createGain());
+    this.shimmer.gain.value = 1;
+    const shimmerDepth = reg(ctx.createGain());
+    shimmerDepth.gain.value = 0.06;
+
+    const n = Math.max(1, P.unison | 0);
+    this.oscs = [];
+    for (let k = 0; k < n; k++) {
+      const osc = reg(ctx.createOscillator());
+      engine.applyWave(osc, P.wave);
+      osc.frequency.value = f0;
+      // Unison: her kopya biraz farklı akortlanır → koro genişliği
+      osc.detune.value = n > 1 ? lerp(-P.unisonDetune, P.unisonDetune, k / (n - 1)) : 0;
+      this.vibDepth.connect(osc.detune);
+
+      // Jitter: her osilatörün kendi yavaş rastgele perde kayması
+      const drift = reg(ctx.createBufferSource());
+      drift.buffer = engine.driftBuffer;
+      drift.loop = true;
+      drift.playbackRate.value = 0.7 + Math.random() * 0.6;
+      const driftGain = reg(ctx.createGain());
+      driftGain.gain.value = P.jitter;
+      drift.connect(driftGain).connect(osc.detune);
+      if (k === 0) drift.connect(shimmerDepth).connect(this.shimmer.gain);
+
+      const og = reg(ctx.createGain());
+      og.gain.value = 1 / Math.sqrt(n);
+      osc.connect(og).connect(this.source);
+      this.oscs.push(osc);
+      this.sources.push(osc, drift);
+    }
+
+    // Nefes: beyaz gürültü da formant filtrelerinden geçer → fısıltılı "h" tınısı
+    this.noise = reg(ctx.createBufferSource());
+    this.noise.buffer = engine.noiseBuffer;
+    this.noise.loop = true;
+    this.noiseGain = reg(ctx.createGain());
+    this.noiseGain.gain.value = 0;
+    this.noise.connect(this.noiseGain).connect(this.source);
+    this.sources.push(this.noise);
+
+    // --- FİLTRE: 3 paralel formant ---
+    this.formants = [];
+    for (let k = 0; k < 3; k++) {
+      const bp = reg(ctx.createBiquadFilter());
+      bp.type = 'bandpass';
+      const g = reg(ctx.createGain());
+      this.source.connect(bp).connect(g).connect(this.shimmer);
+      this.formants.push({ bp, g });
+    }
+
+    // --- ZARF + PAN ---
+    this.env = reg(ctx.createGain());
+    this.env.gain.value = 0;
+    this.out = this.env;
+    this.shimmer.connect(this.env);
+    if (ctx.createStereoPanner) {
+      this.pan = reg(ctx.createStereoPanner());
+      this.pan.pan.value = clamp(opts.pan ?? 0, -1, 1);
+      this.env.connect(this.pan).connect(engine.voiceBus);
+    } else {
+      this.env.connect(engine.voiceBus);
+    }
+  }
+
+  start() {
+    const t = this.ctx.currentTime, P = this.P;
+    this.applyFormants(t, true);
+    // Saldırı: setTargetAtTime üstel olarak hedefe yaklaşır; zaman sabiti
+    // attack/3 → "attack" saniye sonunda hedefin ~%95'ine ulaşılır.
+    this.env.gain.setValueAtTime(0, t);
+    this.env.gain.setTargetAtTime(0.5 * this.velocity, t, P.attack / 3);
+    // Gecikmeli vibrato: ilk anlar düz, sonra yavaşça dalgalanmaya başlar
+    this.vibDepth.gain.setValueAtTime(0, t);
+    this.vibDepth.gain.setTargetAtTime(P.vibratoDepth, t + P.vibratoDelay, 0.25);
+    for (const s of this.sources) {
+      if (s.buffer) s.start(t, Math.random() * s.buffer.duration);
+      else s.start(t);
+    }
+  }
+
+  // Hedef perde/ünlü değişir; ses parametreleri bir sonraki karede güncellenir.
+  setTarget(midi, vowel) {
+    if (midi !== undefined) this.targetMidi = midi;
+    if (vowel !== undefined) this.targetVowel = vowel;
+    this.dirty = true;
+  }
+
+  // Animasyon döngüsünden karede bir kez çağrılır (otomasyon olaylarını sınırlar)
+  update(t) {
+    if (!this.dirty || this.released) return;
+    this.dirty = false;
+    const P = this.P;
+    const midi = this.targetMidi + this.bend;
+    let pitchChanged = false;
+    if (Math.abs(midi - this.appliedMidi) > 0.002) {
+      const f = mtof(midi);
+      for (const o of this.oscs) o.frequency.setTargetAtTime(f, t, P.glide);
+      // Büyük perde sıçramasında vibratoyu sıfırlayıp yeniden başlat:
+      // gerçek şarkıcılar da notaya önce düz oturup sonra titretir.
+      if (Math.abs(midi - this.vibAnchor) > 0.6) {
+        this.vibAnchor = midi;
+        const g = this.vibDepth.gain;
+        g.cancelScheduledValues(t);
+        g.setTargetAtTime(P.vibratoDepth * 0.15, t, 0.05);
+        g.setTargetAtTime(P.vibratoDepth, t + P.vibratoDelay, 0.25);
+      }
+      this.appliedMidi = midi;
+      pitchChanged = true;
+    }
+    if (pitchChanged || Math.abs(this.targetVowel - this.appliedVowel) > 0.002) {
+      this.appliedVowel = this.targetVowel;
+      this.applyFormants(t, false);
+    }
+  }
+
+  applyFormants(t, immediate) {
+    const P = this.P;
+    const f0 = mtof(this.appliedMidi);
+    const fs = computeFormants(P, this.appliedVowel, f0);
+    const tau = P.vowelGlide;
+    const set = (param, v) => immediate ? param.setValueAtTime(v, t) : param.setTargetAtTime(v, t, tau);
+    fs.forEach((f, k) => {
+      set(this.formants[k].bp.frequency, f.F);
+      set(this.formants[k].bp.Q, f.Q);
+      set(this.formants[k].g.gain, f.gain);
+    });
+    // Nefesin perdeye göre dengelenmesi: F1 bandındaki nefes/ton oranı sabit kalır
+    set(this.noiseGain.gain, P.breath * NOISE_LEVEL * (f0 / fs[0].F));
+  }
+
+  release() {
+    if (this.released) return;
+    this.released = true;
+    const t = this.ctx.currentTime, P = this.P;
+    const g = this.env.gain;
+    // O anki değeri koruyup oradan sönümlenmeye başla (tık sesini önler)
+    if (g.cancelAndHoldAtTime) g.cancelAndHoldAtTime(t);
+    else { g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); }
+    g.setTargetAtTime(0, t, P.release / 4);
+    const stopAt = t + P.release * 1.6 + 0.05;
+    for (const s of this.sources) { try { s.stop(stopAt); } catch (e) { /* zaten durmuş */ } }
+    this.oscs[0].onended = () => this.dispose();
+  }
+
+  dispose() {
+    for (const n of this.nodes) { try { n.disconnect(); } catch (e) { /* yoksay */ } }
+    this.engine.voices.delete(this);
+  }
+}
+
+/* =====================================================================
+   5. MOTOR: tüm sesleri toplar, ortak düğümleri tutar
+   ===================================================================== */
+class SingerEngine {
+  constructor(ctx) {
+    this.ctx = ctx;
+    this.params = { ...DEFAULT_PARAMS };
+    this.voices = new Set();
+    this.lead = null;                      // ağzın takip ettiği ses
+    this.waves = buildWaves(ctx);
+    this.noiseBuffer = makeNoiseBuffer(ctx, 2);
+    this.driftBuffer = makeDriftBuffer(ctx, 4);
+
+    // Tüm seslerin "kuru" toplamı
+    this.voiceBus = ctx.createGain();
+    this.voiceBus.gain.value = 0.8;
+    // Ağız animasyonu için: yalnız kuru sesi ölçen analizör (eko ağzı oynatmasın)
+    this.mouthAnalyser = ctx.createAnalyser();
+    this.mouthAnalyser.fftSize = 1024;
+    this.voiceBus.connect(this.mouthAnalyser);
+    this.mouthBuf = new Float32Array(this.mouthAnalyser.fftSize);
+
+    this.master = ctx.createGain();
+    this.master.gain.value = 0.8;
+    // Sınırlayıcı: çok parmakla çalınca taşmayı (clipping) önler
+    this.limiter = ctx.createDynamicsCompressor();
+    this.limiter.threshold.value = -10;
+    this.limiter.knee.value = 6;
+    this.limiter.ratio.value = 12;
+    this.limiter.attack.value = 0.003;
+    this.limiter.release.value = 0.25;
+
+    this.voiceBus.connect(this.master);
+    this.master.connect(this.limiter).connect(ctx.destination);
+  }
+
+  applyWave(osc, wave) {
+    if (wave === 'sawtooth' || !this.waves[wave]) osc.type = 'sawtooth';
+    else osc.setPeriodicWave(this.waves[wave]);
+  }
+
+  noteOn(opts) {
+    // Aynı anda en fazla 8 ses: gerekirse en eskisini sustur
+    const active = [...this.voices].filter((v) => !v.released);
+    if (active.length >= 8) active[0].release();
+    const v = new Voice(this, opts);
+    this.voices.add(v);
+    v.start();
+    this.lead = v;
+    return v;
+  }
+
+  update() {
+    const t = this.ctx.currentTime;
+    for (const v of this.voices) v.update(t);
+    if (this.lead && this.lead.released) {
+      const active = [...this.voices].filter((v) => !v.released);
+      if (active.length) this.lead = active[active.length - 1];
+    }
+  }
+
+  // Kuru sesin anlık şiddeti (RMS → dB)
+  mouthLevelDb() {
+    this.mouthAnalyser.getFloatTimeDomainData(this.mouthBuf);
+    let s = 0;
+    for (let i = 0; i < this.mouthBuf.length; i++) s += this.mouthBuf[i] * this.mouthBuf[i];
+    const rms = Math.sqrt(s / this.mouthBuf.length);
+    return 20 * Math.log10(rms + 1e-9);
+  }
+}
+
+/* =====================================================================
+   6. KARAKTER ANİMASYONU (SVG)
+   ===================================================================== */
+// Ağız şekilleri: genişlik, üst dudak yüksekliği, alt dudak (çene) açıklığı,
+// yuvarlaklık (1 = elips, 0 = sivri köşeli), gülümseme (köşelerin yüksekliği)
+const MOUTH_SHAPES = {
+  rest: { w: 50, top: -2, bot: 6, round: 0.2, smile: 8 },
+  a: { w: 66, top: 16, bot: 54, round: 0.55, smile: 0 },
+  e: { w: 80, top: 10, bot: 28, round: 0.25, smile: 3 },
+  i: { w: 88, top: 5, bot: 13, round: 0.1, smile: 7 },
+  o: { w: 48, top: 20, bot: 36, round: 1, smile: 0 },
+  u: { w: 28, top: 12, bot: 17, round: 1, smile: -1 },
+};
+const MOUTH_KEYS = ['w', 'top', 'bot', 'round', 'smile'];
+
+function mixShape(a, b, t) {
+  const o = {};
+  for (const k of MOUTH_KEYS) o[k] = lerp(a[k], b[k], t);
+  return o;
+}
+
+// İki kübik Bezier eğrisiyle ağız: üst dudak + alt dudak.
+// Kontrol noktaları, eğrinin ortası tam olarak -top / +bot'tan geçecek şekilde hesaplanır.
+function mouthPath(s) {
+  const hw = s.w / 2, cy = -s.smile;
+  const inset = (1 - s.round) * hw * 0.55;
+  const cTop = (-4 * s.top - s.smile) / 3;
+  const cBot = (4 * s.bot - s.smile) / 3;
+  const f = (v) => v.toFixed(1);
+  return `M${f(-hw)} ${f(cy)} C${f(-hw + inset)} ${f(cTop)} ${f(hw - inset)} ${f(cTop)} ${f(hw)} ${f(cy)} ` +
+         `C${f(hw - inset)} ${f(cBot)} ${f(-hw + inset)} ${f(cBot)} ${f(-hw)} ${f(cy)}Z`;
+}
+
+class Character {
+  constructor(svg) {
+    this.svg = svg;
+    const $ = (id) => svg.getElementById ? svg.getElementById(id) : svg.querySelector('#' + id);
+    this.el = {
+      fish: $('fish'), shadow: $('shadow'), tail: $('tail'), finL: $('finL'), finR: $('finR'),
+      stalk: $('stalk'), bulb: $('bulb'), halo: $('halo'),
+      mouthFill: $('mouthFill'), mouthLine: $('mouthLine'), mouthClip: $('mouthClip'),
+      tongue: $('tongue'), teeth: $('teeth'),
+      browL: $('browL'), browR: $('browR'), cheekL: $('cheekL'), cheekR: $('cheekR'),
+      spots: [...$('spots').children],
+      lids: [...svg.querySelectorAll('.lid')],
+      pupils: [...svg.querySelectorAll('.pupil')],
+      lanternStops: [...svg.querySelectorAll('.lantern')],
+      lanternDark: [...svg.querySelectorAll('.lantern-dark')],
+    };
+    this.level = 0;        // 0…1 yumuşatılmış ses şiddeti
+    this.vowel = 0;        // 0…4 yumuşatılmış ünlü
+    this.pitch = 0.5;      // 0…1 perde (kaşlar ve fener rengi için)
+    this.hue = 175;
+    this.blink = 0;        // 0 açık … 1 kapalı
+    this.nextBlink = 1.5;
+    this.blinkStart = -1;
+    this.look = { x: 0, y: 0 };
+    this.lookTarget = { x: 0, y: 0 };
+    this.nextIdleLook = 0;
+    this.bulbPos = { x: 292, y: 46 };
+    this.bulbVel = { x: 0, y: 0 };
+    this.rect = null;
+    this.measure();
+    window.addEventListener('resize', () => this.measure());
+    window.addEventListener('scroll', () => this.measure(), { passive: true });
+  }
+
+  measure() { this.rect = this.svg.getBoundingClientRect(); }
+
+  // Ekrandaki bir noktaya (ör. parmak) bakma yönü
+  setLookAt(clientX, clientY) {
+    const r = this.rect;
+    if (!r || !r.width) return;
+    // viewBox: -10 -45 420 475 → gözlerin ortası (200, 212)
+    const sx = r.left + ((200 + 10) / 420) * r.width;
+    const sy = r.top + ((212 + 45) / 475) * r.height;
+    const dx = clientX - sx, dy = clientY - sy;
+    const d = Math.hypot(dx, dy) || 1;
+    const k = Math.min(1, d / 160);
+    this.lookTarget.x = (dx / d) * k;
+    this.lookTarget.y = (dy / d) * k;
+    this.nextIdleLook = performance.now() / 1000 + 2.5;
+  }
+
+  update(t, dt, s) {
+    const E = this.el;
+    // --- şiddet: hızlı açıl, biraz daha yavaş kapan ---
+    const tauLevel = s.level > this.level ? 0.03 : 0.09;
+    this.level += (s.level - this.level) * smooth(dt, tauLevel);
+    this.vowel += (s.vowel - this.vowel) * smooth(dt, 0.06);
+    this.pitch += (s.pitch - this.pitch) * smooth(dt, 0.12);
+    const L = this.level;
+
+    // --- gövde: nefes alma + sallanma + şişme ---
+    const breathe = Math.sin(t * 1.6);
+    const sway = Math.sin(t * 0.9) * 2 + L * Math.sin(t * 2.6) * 7 + L * Math.sin(t * 11) * 0.8;
+    const bob = Math.sin(t * 1.25) * 6 - L * 4;
+    const sx = 1 + 0.014 * breathe + L * 0.035;
+    const sy = 1 - 0.012 * breathe + L * 0.03;
+    E.fish.setAttribute('transform',
+      `translate(0 ${bob.toFixed(2)}) rotate(${sway.toFixed(2)} 200 300) translate(200 385) scale(${sx.toFixed(4)} ${sy.toFixed(4)}) translate(-200 -385)`);
+    E.shadow.setAttribute('rx', (112 - bob * 1.5 + L * 6).toFixed(1));
+    E.shadow.setAttribute('opacity', (0.32 - bob * 0.006).toFixed(3));
+
+    // --- yüzgeçler ve kuyruk ---
+    const flap = Math.sin(t * 2.3) * 8 + L * Math.sin(t * 8) * 12;
+    E.finL.setAttribute('transform', `translate(80 272) rotate(${(-flap).toFixed(2)})`);
+    E.finR.setAttribute('transform', `translate(320 272) scale(-1 1) rotate(${(-flap).toFixed(2)})`);
+    E.tail.setAttribute('transform', `translate(292 338) rotate(${(Math.sin(t * 1.7) * 9 + L * Math.sin(t * 5) * 6).toFixed(2)})`);
+
+    // --- ağız: ünlüler arası karışım × açıklık ---
+    const v = clamp(this.vowel, 0, 4);
+    const i0 = Math.min(3, Math.floor(v));
+    const vowelShape = mixShape(MOUTH_SHAPES[VOWELS[i0]], MOUTH_SHAPES[VOWELS[i0 + 1]], v - i0);
+    const open = clamp(Math.pow(L, 0.8), 0, 1);
+    const m = mixShape(MOUTH_SHAPES.rest, vowelShape, open);
+    const d = mouthPath(m);
+    E.mouthFill.setAttribute('d', d);
+    E.mouthLine.setAttribute('d', d);
+    E.mouthClip.setAttribute('d', d);
+    E.tongue.setAttribute('cy', (m.bot * 0.8 + 4).toFixed(1));
+    E.tongue.setAttribute('rx', (m.w * 0.3).toFixed(1));
+    E.tongue.setAttribute('ry', Math.max(3, m.bot * 0.4).toFixed(1));
+    E.teeth.setAttribute('transform', `translate(0 ${(-m.top - 1).toFixed(1)}) scale(${(0.6 + open * 0.4).toFixed(2)})`);
+
+    // --- göz kırpma (rastgele aralıklarla, bazen çift) ---
+    if (t > this.nextBlink && this.blinkStart < 0) this.blinkStart = t;
+    if (this.blinkStart >= 0) {
+      const p = (t - this.blinkStart) / 0.16;
+      this.blink = p < 0.5 ? p * 2 : Math.max(0, 2 - p * 2);
+      if (p >= 1) {
+        this.blinkStart = -1;
+        this.blink = 0;
+        this.nextBlink = t + (Math.random() < 0.18 ? 0.22 : 2 + Math.random() * 4);
+      }
+    }
+    // Gür seste mutlulukla kısılan gözler
+    const squint = clamp((L - 0.55) * 1.2, 0, 0.45);
+    const lid = Math.max(this.blink, squint);
+    for (const el of E.lids) el.setAttribute('transform', `translate(0 ${(lid * 76).toFixed(1)})`);
+
+    // --- bakış: parmağı takip eder, boştayken etrafa bakınır ---
+    if (t > this.nextIdleLook) {
+      this.lookTarget.x = (Math.random() * 2 - 1) * 0.7;
+      this.lookTarget.y = (Math.random() * 2 - 1) * 0.4;
+      this.nextIdleLook = t + 1.5 + Math.random() * 3;
+    }
+    this.look.x += (this.lookTarget.x - this.look.x) * smooth(dt, 0.08);
+    this.look.y += (this.lookTarget.y - this.look.y) * smooth(dt, 0.08);
+    for (const el of E.pupils) el.setAttribute('transform', `translate(${(this.look.x * 9).toFixed(2)} ${(this.look.y * 7).toFixed(2)})`);
+
+    // --- kaşlar: perdeyle yükselir ---
+    const brow = s.singing ? (this.pitch - 0.4) * 16 : Math.sin(t * 0.5) * 1.5;
+    E.browL.setAttribute('transform', `translate(0 ${(-brow).toFixed(2)}) rotate(${(-brow * 0.3).toFixed(2)} 146 154)`);
+    E.browR.setAttribute('transform', `translate(0 ${(-brow).toFixed(2)}) rotate(${(brow * 0.3).toFixed(2)} 254 154)`);
+
+    // --- yanaklar ve benekler sesle parlar ---
+    const blush = (0.25 + L * 0.45).toFixed(3);
+    E.cheekL.setAttribute('opacity', blush);
+    E.cheekR.setAttribute('opacity', blush);
+    E.spots.forEach((el, i) => {
+      el.setAttribute('opacity', (0.35 + 0.25 * Math.sin(t * 1.3 + i * 1.7) + L * 0.6).toFixed(3));
+    });
+
+    // --- fener: yay benzeri gecikmeyle sallanır, sesle parlar, perdeyle renk değiştirir ---
+    const tx = 292 - sway * 2.2 + Math.sin(t * 0.7) * 3;
+    const ty = 46 + Math.sin(t * 1.1) * 4 + L * Math.sin(t * s.vibRate * Math.PI * 2) * 2.5 - L * 6;
+    const k = 60, damp = 7;
+    this.bulbVel.x += ((tx - this.bulbPos.x) * k - this.bulbVel.x * damp) * dt;
+    this.bulbVel.y += ((ty - this.bulbPos.y) * k - this.bulbVel.y * damp) * dt;
+    this.bulbPos.x += this.bulbVel.x * dt;
+    this.bulbPos.y += this.bulbVel.y * dt;
+    const bx = this.bulbPos.x, by = this.bulbPos.y;
+    E.bulb.setAttribute('transform', `translate(${bx.toFixed(2)} ${by.toFixed(2)})`);
+    E.stalk.setAttribute('d', `M200 130 C${(204 - sway).toFixed(1)} 62 ${(bx - 46).toFixed(1)} ${(by - 18).toFixed(1)} ${bx.toFixed(1)} ${by.toFixed(1)}`);
+    const glow = s.singing ? 0.35 + L * 0.75 : 0.28 + 0.1 * Math.sin(t * 2);
+    E.halo.setAttribute('opacity', clamp(glow, 0, 1).toFixed(3));
+    E.halo.setAttribute('r', (60 + L * 45).toFixed(1));
+    // Perde → renk: pes = turkuaz, orta = yeşil, tiz = altın
+    const targetHue = s.singing ? 185 - this.pitch * 145 : 175;
+    this.hue += (targetHue - this.hue) * smooth(dt, 0.15);
+    const col = `hsl(${this.hue.toFixed(0)} 95% 62%)`;
+    const dark = `hsl(${this.hue.toFixed(0)} 80% 35%)`;
+    if (col !== this._col) {
+      for (const st of E.lanternStops) st.setAttribute('stop-color', col);
+      for (const st of E.lanternDark) st.setAttribute('stop-color', dark);
+      this._col = col;
+    }
+  }
+}
+
+/* =====================================================================
+   7. XY ALANI (Canvas)
+   X → perde, Y → ünlü (yukarıda A, aşağıda U). Her parmak ayrı ses.
+   ===================================================================== */
+class XYPad {
+  constructor(canvas, app) {
+    this.canvas = canvas;
+    this.app = app;
+    this.g = canvas.getContext('2d');
+    this.touches = new Map();     // pointerId → {x, y, voice, ...}
+    this.hover = null;
+    this.ripples = [];
+    this.gridCache = document.createElement('canvas');
+    this.gridDirty = true;
+    this.resize();
+    new ResizeObserver(() => this.resize()).observe(canvas);
+
+    canvas.addEventListener('pointerdown', (e) => this.onDown(e));
+    canvas.addEventListener('pointermove', (e) => this.onMove(e));
+    canvas.addEventListener('pointerup', (e) => this.onUp(e));
+    canvas.addEventListener('pointercancel', (e) => this.onUp(e));
+    canvas.addEventListener('lostpointercapture', (e) => this.onUp(e));
+    canvas.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') this.hover = null; });
+    canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+  }
+
+  resize() {
+    const r = this.canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    this.w = Math.max(1, r.width);
+    this.h = Math.max(1, r.height);
+    this.dpr = dpr;
+    this.canvas.width = Math.round(this.w * dpr);
+    this.canvas.height = Math.round(this.h * dpr);
+    this.gridCache.width = this.canvas.width;
+    this.gridCache.height = this.canvas.height;
+    this.gridDirty = true;
+  }
+
+  norm(e) {
+    const r = this.canvas.getBoundingClientRect();
+    return { x: clamp((e.clientX - r.left) / r.width, 0, 1), y: clamp((e.clientY - r.top) / r.height, 0, 1) };
+  }
+
+  // X konumu → MIDI nota (ileride gamaya kilitleme burada yapılacak)
+  midiAt(x) {
+    const P = this.app.engine ? this.app.engine.params : DEFAULT_PARAMS;
+    return P.lowNote + x * P.range;
+  }
+  // Y konumu → ünlü (0=a … 4=u). Şeritlerin ortası saf ünlü, aralar karışım.
+  vowelAt(y) { return clamp(y * 5 - 0.5, 0, 4); }
+
+  onDown(e) {
+    if (!this.app.engine) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    e.preventDefault();
+    try { this.canvas.setPointerCapture(e.pointerId); } catch (err) { /* yoksay */ }
+    const p = this.norm(e);
+    const voice = this.app.engine.noteOn({ midi: this.midiAt(p.x), vowel: this.vowelAt(p.y), pan: (p.x - 0.5) * 0.6 });
+    this.touches.set(e.pointerId, { ...p, voice, trail: [], hue: 160 + ((this.touches.size * 47) % 140), lastRipple: 0 });
+    this.app.onPadActivity(e);
+  }
+
+  onMove(e) {
+    const p = this.norm(e);
+    const tch = this.touches.get(e.pointerId);
+    if (tch) {
+      tch.x = p.x; tch.y = p.y;
+      this.app.onPadActivity(e);
+    } else if (e.pointerType === 'mouse') {
+      this.hover = p;
+    }
+  }
+
+  onUp(e) {
+    const tch = this.touches.get(e.pointerId);
+    if (!tch) return;
+    tch.voice.release();
+    this.touches.delete(e.pointerId);
+  }
+
+  releaseAll() {
+    for (const tch of this.touches.values()) tch.voice.release();
+    this.touches.clear();
+  }
+
+  // Ses parametrelerini karede bir kez güncelle
+  pushToVoices() {
+    for (const tch of this.touches.values()) tch.voice.setTarget(this.midiAt(tch.x), this.vowelAt(tch.y));
+  }
+
+  drawGrid() {
+    const g = this.gridCache.getContext('2d');
+    const { w, h, dpr } = this;
+    const P = this.app.engine ? this.app.engine.params : DEFAULT_PARAMS;
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, w, h);
+    // Ünlü şeritleri
+    for (let i = 0; i < 5; i++) {
+      const y0 = (i / 5) * h;
+      g.fillStyle = i % 2 ? 'rgba(143,124,255,0.035)' : 'rgba(63,242,220,0.03)';
+      g.fillRect(0, y0, w, h / 5);
+      g.fillStyle = 'rgba(232,237,255,0.13)';
+      g.font = `700 ${Math.min(64, h / 7)}px ui-rounded, system-ui, sans-serif`;
+      g.textBaseline = 'middle';
+      g.fillText(VOWELS[i].toUpperCase(), 14, y0 + h / 10);
+    }
+    // Nota çizgileri
+    g.font = '11px system-ui, sans-serif';
+    g.textBaseline = 'bottom';
+    for (let m = Math.ceil(P.lowNote); m <= P.lowNote + P.range; m++) {
+      const x = ((m - P.lowNote) / P.range) * w;
+      const pc = ((m % 12) + 12) % 12;
+      const isC = pc === 0;
+      const natural = [0, 2, 4, 5, 7, 9, 11].includes(pc);
+      g.strokeStyle = isC ? 'rgba(63,242,220,0.35)' : natural ? 'rgba(160,180,255,0.14)' : 'rgba(160,180,255,0.06)';
+      g.lineWidth = isC ? 1.5 : 1;
+      g.beginPath(); g.moveTo(x + 0.5, 0); g.lineTo(x + 0.5, h); g.stroke();
+      if (natural && w / P.range > 16) {
+        g.fillStyle = isC ? 'rgba(63,242,220,0.8)' : 'rgba(200,210,255,0.4)';
+        g.fillText(noteName(m), x + 3, h - 4);
+      }
+    }
+    this.gridDirty = false;
+  }
+
+  draw(t, dt, level) {
+    const g = this.g;
+    const { w, h, dpr } = this;
+    if (this.gridDirty) this.drawGrid();
+    g.setTransform(1, 0, 0, 1, 0, 0);
+    g.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    g.drawImage(this.gridCache, 0, 0);
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // Fare gezinirken önizleme
+    if (this.hover && !this.touches.size) {
+      const x = this.hover.x * w, y = this.hover.y * h;
+      g.strokeStyle = 'rgba(232,237,255,0.18)';
+      g.setLineDash([4, 6]);
+      g.beginPath(); g.moveTo(x, 0); g.lineTo(x, h); g.moveTo(0, y); g.lineTo(w, y); g.stroke();
+      g.setLineDash([]);
+      g.fillStyle = 'rgba(232,237,255,0.6)';
+      g.font = '12px system-ui, sans-serif';
+      g.fillText(noteName(this.midiAt(this.hover.x)), x + 8, y - 8);
+    }
+
+    // Halkalar (sonar dalgaları)
+    g.lineWidth = 2;
+    this.ripples = this.ripples.filter((r) => (r.age += dt) < 1.2);
+    for (const r of this.ripples) {
+      const k = r.age / 1.2;
+      g.strokeStyle = `hsla(${r.hue},95%,65%,${(1 - k) * 0.5})`;
+      g.beginPath(); g.arc(r.x, r.y, 14 + k * 70, 0, Math.PI * 2); g.stroke();
+    }
+
+    // Parmaklar
+    for (const tch of this.touches.values()) {
+      const x = tch.x * w, y = tch.y * h;
+      tch.trail.push({ x, y });
+      if (tch.trail.length > 24) tch.trail.shift();
+      if (t - tch.lastRipple > 0.28) { this.ripples.push({ x, y, hue: tch.hue, age: 0 }); tch.lastRipple = t; }
+      // iz
+      g.lineCap = 'round';
+      for (let i = 1; i < tch.trail.length; i++) {
+        const a = i / tch.trail.length;
+        g.strokeStyle = `hsla(${tch.hue},95%,65%,${a * 0.5})`;
+        g.lineWidth = a * 6;
+        g.beginPath(); g.moveTo(tch.trail[i - 1].x, tch.trail[i - 1].y); g.lineTo(tch.trail[i].x, tch.trail[i].y); g.stroke();
+      }
+      // parıltı
+      const rad = 26 + level * 26;
+      const grd = g.createRadialGradient(x, y, 0, x, y, rad);
+      grd.addColorStop(0, `hsla(${tch.hue},100%,85%,0.95)`);
+      grd.addColorStop(0.35, `hsla(${tch.hue},95%,60%,0.45)`);
+      grd.addColorStop(1, `hsla(${tch.hue},95%,60%,0)`);
+      g.fillStyle = grd;
+      g.beginPath(); g.arc(x, y, rad, 0, Math.PI * 2); g.fill();
+      // etiket
+      const midi = tch.voice.appliedMidi;
+      const vw = VOWELS[Math.round(this.vowelAt(tch.y))];
+      g.fillStyle = 'rgba(255,255,255,0.9)';
+      g.font = '600 13px system-ui, sans-serif';
+      g.textBaseline = 'bottom';
+      g.fillText(`${noteName(midi)} · ${vw}`, Math.min(x + 14, w - 60), Math.max(18, y - 14));
+    }
+  }
+}
+
+/* =====================================================================
+   8. UYGULAMA: başlatma ve animasyon döngüsü
+   ===================================================================== */
+const app = {
+  ctx: null,
+  engine: null,
+  character: new Character(document.getElementById('isil')),
+  pad: null,
+  readout: document.getElementById('readout'),
+  padHint: document.getElementById('padHint'),
+  lastT: performance.now() / 1000,
+  levelSmoothed: 0,
+
+  onPadActivity(e) {
+    this.character.setLookAt(e.clientX, e.clientY);
+    this.padHint.classList.add('hidden');
+  },
+
+  async start() {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    // iOS: sessiz düğmesi açıkken de çalsın
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* yoksay */ }
+    this.ctx = new AC({ latencyHint: 'interactive' });
+    if (this.ctx.state !== 'running') await this.ctx.resume();
+    this.engine = new SingerEngine(this.ctx);
+    this.pad.gridDirty = true;
+    document.getElementById('start').classList.add('hidden');
+    this.readout.innerHTML = 'Hazır — alana dokun';
+  },
+};
+app.pad = new XYPad(document.getElementById('pad'), app);
+window.isil = app; // hata ayıklama için konsoldan erişim
+
+document.getElementById('startBtn').addEventListener('click', () => app.start());
+
+// Sekme gizlenince takılı kalan sesleri sustur
+document.addEventListener('visibilitychange', () => { if (document.hidden) app.pad.releaseAll(); });
+
+function frame(nowMs) {
+  const t = nowMs / 1000;
+  const dt = clamp(t - app.lastT, 0.001, 0.1);
+  app.lastT = t;
+  const E = app.engine;
+  let level = 0, vowel = 0.6, pitch = 0.5, singing = false;
+  const P = E ? E.params : DEFAULT_PARAMS;
+
+  if (E) {
+    app.pad.pushToVoices();
+    E.update();
+    // dB → 0…1 ağız açıklığı (-42 dB kapalı, -16 dB tam açık)
+    level = clamp((E.mouthLevelDb() + 42) / 26, 0, 1);
+    const lead = E.lead;
+    singing = [...E.voices].some((v) => !v.released);
+    if (lead) {
+      vowel = lead.appliedVowel;
+      pitch = clamp((lead.appliedMidi - P.lowNote) / P.range, 0, 1);
+      if (singing) {
+        app.readout.innerHTML = `<b>${noteName(lead.appliedMidi)}</b> · ${VOWELS[Math.round(vowel)].repeat(3)}`;
+      }
+    }
+  }
+  app.levelSmoothed += (level - app.levelSmoothed) * smooth(dt, 0.05);
+  app.character.update(t, dt, { level, vowel, pitch, singing, vibRate: P.vibratoRate });
+  app.pad.draw(t, dt, app.levelSmoothed);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
